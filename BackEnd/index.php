@@ -25,6 +25,10 @@ require_once 'config.php';
                 <?php
                 include("leveldata.php");
                 ?>
+                <div class="seeLevelList">
+                    <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
+                </div>
+                
             </aside>
             <section class="mainContent">
                 <div class="subjectSelect">

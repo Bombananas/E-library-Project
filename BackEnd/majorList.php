@@ -75,7 +75,6 @@ if ($levelId > 0) {
         <div class="listContainer">
             <table class="contentTable">
                 <thead>
-                    <th>ID</th>
                     <th>Major Name (KH)</th>
                     <th>Major Name (EN)</th>
                     <th>Year of Study</th>
@@ -91,18 +90,18 @@ if ($levelId > 0) {
                         foreach ($majors as $row) {
                     ?>
                             <tr>
-                                <td><?php echo $ID ?></td>
-                                <td><?php echo htmlspecialchars($row["major_name_kh"]) ?></td>
-                                <td><?php echo htmlspecialchars($row["major_name_en"]) ?></td>
+                                <td><a href="#"><?php echo htmlspecialchars($row["major_name_kh"]) ?></a></td>
+                                <td><a href="#"><?php echo htmlspecialchars($row["major_name_en"]) ?></a></td>
                                 <td><?php echo htmlspecialchars($row["year_stardy"]) ?></td>
                                 <td><?php echo htmlspecialchars($row["description"]) ?></td>
                                 <td>
                                     <a href="#" onclick="deleteMajor(<?php echo $row['major_id'] ?>, <?php echo $levelId ?>)">Delete</a>
                                     <a href="#" onclick="editMajor(<?php echo $row['major_id'] ?>)">Edit</a>
+                                    <a href="#"  onclick="addBook(<?php echo $row['major_id'] ?>)">Add Book</a>
                                 </td>
                             </tr>
+                            
                     <?php
-                            $ID++;
                         }
                     }
                     ?>

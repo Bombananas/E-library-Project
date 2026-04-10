@@ -57,7 +57,12 @@ const App = {
 
     goBack() {
         window.history.back();
-    }
+    }, 
+    editMajor(id) {
+    loadData('addMajorForm.php?edit_id=' + id);
+    fetch('majorList.php?edit_id=' + id + '&ajax=1', { credentials: 'same-origin' })
+        .then(res => res.json())
+}
 };
 
 const loadData = App.loadData;
