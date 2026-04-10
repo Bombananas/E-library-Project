@@ -43,6 +43,9 @@ require_once 'config.php';
         </div>
     </main>
     <div id="showResult" class="showResult"></div>
+    <footer class="footer">
+        <p>&copy; NPIT. All rights reserved.</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 

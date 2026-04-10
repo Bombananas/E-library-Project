@@ -117,3 +117,9 @@
     .editcontent:hover {
         text-decoration: underline;
     }
+    .footer {
+        text-align: center;
+        padding: 1em 0;
+        width: 100%;
+        bottom: 0;
+    }
