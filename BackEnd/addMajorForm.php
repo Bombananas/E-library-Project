@@ -1,7 +1,6 @@
 <?php
 require_once 'config.php';
 $goBackToLevel = isset($_GET['level_id_pre']) ? (int)$_GET['level_id_pre'] : 0;
-echo 'Go back to Level ID: ' . ($goBackToLevel > 0 ? $goBackToLevel : 'none');
 function getMajorsByLevelId($levelId) {
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE level_id = ?");
