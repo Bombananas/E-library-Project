@@ -27,7 +27,6 @@ const App = {
         try {
             const levelIdPre = new URL(url, window.location.origin).searchParams.get('level_id_pre')
                 || new URL(url, window.location.origin).searchParams.get('level_idpre');
-            console.log('Pre-selected Level ID:', levelIdPre || 'none');
         } catch (err) {
             console.log('Pre-selected Level ID: none');
         }

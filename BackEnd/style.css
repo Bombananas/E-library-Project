@@ -90,3 +90,30 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+.contentTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .contentTable th,
+    .contentTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .contentTable th, .contentTable td {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+    .deletecontent,
+    .editcontent {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+
+    .deletecontent:hover,
+    .editcontent:hover {
+        text-decoration: underline;
+    }

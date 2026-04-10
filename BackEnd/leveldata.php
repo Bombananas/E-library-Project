@@ -27,4 +27,15 @@ if (mysqli_num_rows($displayList) > 0) {
     .levelLink h2 a:active {
         color: #333;
     }
+    .levelLink h2 a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .levelLink h2 a:hover {
+        text-decoration: underline;
+    }
+    .levelLink h2 a:active {
+        color: #333;
+    }
 </style>

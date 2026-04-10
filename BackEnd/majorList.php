@@ -30,33 +30,38 @@ if ($levelId > 0) {
 }
 ?>
 <style>
-    .contentTable {
-        width: 100%;
-        border-collapse: collapse;
+    .filtercontainer {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-family: sans-serif;
+        flex-direction: row;
+        margin: 1em;
     }
 
-    .contentTable th,
-    .contentTable td {
-        border: 1px solid #ddd;
-        padding: 8px;
+    .pill {
+        padding: 10px 25px;
+        border: 1px solid #ccc;
+        border-radius: 50px;
+        background-color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        margin-bottom: .2em;
     }
 
-    .contentTable th, .contentTable td {
-        background-color: #f2f2f2;
-        text-align: left;
+    /* The "Selected" state */
+    .pill.active {
+        background-color: black;
+        color: white;
+        border-color: black;
     }
 
-    .deletecontent,
-    .editcontent {
-        color: #007bff;
-        text-decoration: none;
-        margin-right: 10px;
+    .pill:hover:not(.active) {
+        background-color: #f0f0f0;
     }
 
-    .deletecontent:hover,
-    .editcontent:hover {
-        text-decoration: underline;
-    }
+
     .button button {
         padding: 10px;
         background-color: #007bff;
@@ -65,6 +70,7 @@ if ($levelId > 0) {
         border: none;
         cursor: pointer;
     }
+
     .button button:hover {
         background-color: #0056b3;
     }
@@ -73,43 +79,29 @@ if ($levelId > 0) {
 <div class="container">
     <section class="contentList">
         <div class="listContainer">
-            <table class="contentTable">
-                <thead>
-                    <th>Major Name (KH)</th>
-                    <th>Major Name (EN)</th>
-                    <th>Year of Study</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                </thead>
-                <tbody class="contentTableBody">
-                    <?php
-                    if (empty($majors)) {
-                        echo '<tr><td colspan="6">No majors found for this level.</td></tr>';
-                    } else {
-                        $ID = 1;
-                        foreach ($majors as $row) {
-                    ?>
-                            <tr>
-                                <td><a href="#"><?php echo htmlspecialchars($row["major_name_kh"]) ?></a></td>
-                                <td><a href="#"><?php echo htmlspecialchars($row["major_name_en"]) ?></a></td>
-                                <td><?php echo htmlspecialchars($row["year_stardy"]) ?></td>
-                                <td><?php echo htmlspecialchars($row["description"]) ?></td>
-                                <td>
-                                    <a href="#" onclick="deleteMajor(<?php echo $row['major_id'] ?>, <?php echo $levelId ?>)">Delete</a>
-                                    <a href="#" onclick="editMajor(<?php echo $row['major_id'] ?>)">Edit</a>
-                                    <a href="#"  onclick="addBook(<?php echo $row['major_id'] ?>)">Add Book</a>
-                                </td>
-                            </tr>
-                            
-                    <?php
+            <div class="filtercontainer ">
+                <?php
+                if (empty($majors)) {
+                    echo '<tr><td colspan="6">No majors found for this level.</td></tr>';
+                } else {
+                    $columnCount = 0;
+                    foreach ($majors as $row) {
+                        if ($columnCount % 4 == 0) {
+                            echo '<br>';
                         }
+                ?>
+                        <button class="pill"><?php echo htmlspecialchars($row["major_name_kh"]) ?> / <?php echo htmlspecialchars($row["major_name_en"]) ?></button>
+
+
+                <?php
+                        $columnCount++;
                     }
-                    ?>
-                </tbody>
-            </table>
+                }
+                ?>
+            </div>
         </div>
     </section>
     <div class="button">
-        <button type="button" onclick="closeForm(); loadData('addMajorForm.php<?php echo $levelId > 0 ? '?level_id_pre=' . $levelId : '' ?>')">Add More Major</button>
+        <button type="button" onclick=" loadData('majorFullList.php?level_id=<?php echo $levelId ?>');">See The Full List Of Majors</button>
     </div>
 </div>

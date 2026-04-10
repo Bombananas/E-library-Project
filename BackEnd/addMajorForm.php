@@ -1,6 +1,7 @@
 <?php
 require_once 'config.php';
-
+$goBackToLevel = isset($_GET['level_id_pre']) ? (int)$_GET['level_id_pre'] : 0;
+echo 'Go back to Level ID: ' . ($goBackToLevel > 0 ? $goBackToLevel : 'none');
 function getMajorsByLevelId($levelId) {
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE level_id = ?");
@@ -17,12 +18,17 @@ function getMajorsByLevelId($levelId) {
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
 $major = null;
 if ($editId > 0) {
+
     $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE major_id = ?");
     $stmt->bind_param('i', $editId);
     $stmt->execute();
     $result = $stmt->get_result();
     $major = $result->fetch_assoc();
-    $stmt->close();
+    $stmt->close();   
+    $getLevelId = $conn->prepare("SELECT level_id FROM tblmajor WHERE major_id = ?");
+    $getLevelId->bind_param('i', $editId);
+    $getLevelId->execute();
+    $getLevelIdResult = $getLevelId->get_result();  
 }
 $levelIdPre = 0;
 if (isset($_GET['level_id_pre'])) {
@@ -141,6 +147,7 @@ $yearNow = date('Y');
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
             <button type="button" onclick="closeForm();">Close</button>
+            <button type="button" onclick="closeForm(); loadData('majorFullList.php?level_id=<?php echo $goBackToLevel > 0 ? $goBackToLevel : $getLevelIdResult->fetch_assoc()['level_id'] ?>')">Go Back</button>
         </form>
     </div>
 </body>
