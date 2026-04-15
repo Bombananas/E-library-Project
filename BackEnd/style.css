@@ -85,7 +85,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    width: 600px;
+    width: 720px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -118,8 +118,11 @@
         text-decoration: underline;
     }
     .footer {
-        text-align: center;
+        text-align: left;
         padding: 1em 0;
         width: 100%;
         bottom: 0;
+    }
+        .footer p{
+            margin-left: 3em;  
     }

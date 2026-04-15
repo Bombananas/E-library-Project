@@ -37,14 +37,16 @@ require_once 'config.php';
                     ?>
                 </div>
                 <article class="contentDisplay">
-
+                    <div class="seeLevelList">
+                    <button type="button" onclick="closeForm(); ">Add Book</button>
+                </div>
                 </article>
             </section>
         </div>
     </main>
     <div id="showResult" class="showResult"></div>
     <footer class="footer">
-        <p>&copy; NPIT. All rights reserved.</p>
+        <p>&copy; វិទ្យាស្ថានជាតិពហុបច្ចេកទេសកម្ពុជា NPIT. All rights reserved.</p>
     </footer>
     <script src="script.js"></script>
 </body>
