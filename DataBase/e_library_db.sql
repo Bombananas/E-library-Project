@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2026 at 09:43 AM
+-- Generation Time: Apr 22, 2026 at 09:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,6 +74,14 @@ CREATE TABLE `tblmajor` (
   `description` text NOT NULL,
   `level_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblmajor`
+--
+
+INSERT INTO `tblmajor` (`major_id`, `major_name_kh`, `major_name_en`, `year_stardy`, `description`, `level_id`) VALUES
+(18, 'វិទ្យាសាស្ត្យកុំព្យូទ័', 'Computer Science', 2026, 'Class of 2026 second semester', 17),
+(19, 'អគ្គីសនី', 'Electrician', 2026, 'Class of 2026 second semester', 17);
 
 -- --------------------------------------------------------
 
@@ -165,7 +173,7 @@ ALTER TABLE `tbllevel`
 -- AUTO_INCREMENT for table `tblmajor`
 --
 ALTER TABLE `tblmajor`
-  MODIFY `major_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `major_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `tbluser`
