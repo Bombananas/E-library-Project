@@ -1,5 +1,7 @@
 <?php
 require_once 'config.php';
+session_start();
+$userRole = $_SESSION['user_role'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +15,18 @@ require_once 'config.php';
 
 <body>
     <header class="banner">
+        <nav>
+            <div class="logo">
+                <h1>NPIT E-Library</h1>
+            </div>
+            <div class="navLinks">
+                <button type="button" onclick="closeForm(); loadData('loginForm.php')">Login</button>
+                <?php if ($userRole == 'admin'): ?>
+                    <h1>Admin Panel</h1>
+                    <?php endif; ?>
+                    <button type="button" onclick="closeForm(); loadData('registerForm.php')">Register</button>
+            </div>
+        </nav>
         <div class="bannerContainer">
         </div>
     </header>

@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-$levelId = isset($_GET['level_id']) ? (int)$_GET['level_id'] : 0;
+$levelId = isset($_GET['level_id']) ? (int)$_GET['level_id'] : null;
 $majors = [];
 if (isset($_GET['delete'])) {
     $deleteID = (int)$_GET['delete'];
@@ -18,7 +18,7 @@ if (isset($_GET['delete'])) {
     header('Location: index.php');
     exit;
 }
-if ($levelId > 0) {
+if ($levelId !== null) {
     $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE level_id = ?");
     $stmt->bind_param('i', $levelId);
     $stmt->execute();
@@ -50,7 +50,6 @@ if ($levelId > 0) {
         margin-bottom: .2em;
     }
 
-    /* The "Selected" state */
     .pill.active {
         background-color: black;
         color: white;
@@ -101,7 +100,9 @@ if ($levelId > 0) {
             </div>
         </div>
     </section>
+<?php if ($levelId !== null): ?>
     <div class="button">
         <button type="button" onclick=" loadData('majorFullList.php?level_id=<?php echo $levelId ?>');">See The Full List Of Majors</button>
     </div>
+<?php endif; ?>
 </div>
