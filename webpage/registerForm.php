@@ -2,7 +2,7 @@
 require_once 'config.php';
 $userName = $_POST['userName'] ?? '';
 $password = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
-$userNameQury = "SELECT * FROM userinfo WHERE UserName = ?";
+$userNameQury = "SELECT * FROM tbluser WHERE user_name = ?";
 $stmt = $conn->prepare($userNameQury);
 $stmt->bind_param('s', $userName);
 $stmt->execute();
@@ -11,7 +11,7 @@ if ($result->num_rows > 0) {
     echo 'Username already exists.';
     exit;
 }
-$registerQuery = "INSERT INTO userinfo (UserName, Password) VALUES (?, ?)";
+$registerQuery = "INSERT INTO tbluser (user_name, user_password) VALUES (?, ?)";
 if(isset($_POST['registerSubmit'])) {
 if (empty($userName) || empty($password)) {
     echo 'Username and password cannot be empty.';

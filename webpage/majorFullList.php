@@ -39,7 +39,6 @@ if ($levelId > 0) {
                 <thead>
                     <th>Major Name (KH)</th>
                     <th>Major Name (EN)</th>
-                    <th>Year of Study</th>
                     <th>Description</th>
                     <th>Action</th>
                 </thead>
@@ -54,7 +53,6 @@ if ($levelId > 0) {
                             <tr>
                                 <td><?php echo htmlspecialchars($row["major_name_kh"]) ?></td>
                                 <td><?php echo htmlspecialchars($row["major_name_en"]) ?></td>
-                                <td><?php echo htmlspecialchars($row["year_stardy"]) ?></td>
                                 <td><?php echo htmlspecialchars($row["description"]) ?></td>
                                 <td>
                                     <a href="#" onclick="deleteMajor(<?php echo $row['major_id'] ?>, <?php echo $levelId ?>)">Delete</a>
