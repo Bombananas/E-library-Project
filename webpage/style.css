@@ -91,6 +91,11 @@
         border: none;
         cursor: pointer;
 }
+
+.addBookButton:hover {
+    background-color: #0056b3;
+}
+
 .seeLevelList .addBookButton button:hover {
     background-color: #0056b3;
 }

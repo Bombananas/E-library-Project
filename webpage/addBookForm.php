@@ -1,46 +1,38 @@
 <?php
 require_once 'config.php';
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
-$bookName = '';
-$bookAuthor = '';
-$description = '';
-$bookFile = '';
-$bookCover = '';
-$videoFile = '';
-    $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
-        $bookName = trim($_POST['bookName'] ?? '');
-        $bookAuthor = trim($_POST['bookAuthor'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $majorId = trim($_POST['majorId'] ?? '19');
-        $bookFile = file_get_contents($_FILES['uploadBookFile']['name']) ?? '';
-        $bookFile = file_get_contents($_FILES['uploadBookFile']['tmp_name']) ?? '';
-        $bookCover = file_get_contents($_FILES['uploadBookCover']['name']) ?? '';
-        $bookCover = file_get_contents($_FILES['uploadBookCover']['tmp_name']) ?? '';
-        $videoFile = file_get_contents($_FILES['uploadVideoFile']['name']) ?? '';
-        $videoFile = file_get_contents($_FILES['uploadVideoFile']['tmp_name']) ?? '';
-        $booksFolder = 'uploads/books/';
-        $coverFolder = 'uploads/covers/';
-        $videoFolder = 'uploads/videos/';
-        if (!is_dir($booksFolder)) {  
-            mkdir($booksFolder, 0777, true);
-        }
-        if (!is_dir($coverFolder)) {
-            mkdir($coverFolder, 0777, true);
-        }
-        if (!is_dir($videoFolder)) {
-            mkdir($videoFolder, 0777, true);
-        }
-        $stmt->bind_param('sssssss', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
-        $stmt->execute();
-        echo $stmt->error;
-        $stmt->close();
-        header('Location: bookList.php');
-        }
 
 ?>
 <html lang="en">
 <style>
+    #bookFormModal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #bookFormModal.show {
+        display: flex;
+    }
+    
+    .form-content {
+        background-color: #333;
+        padding: 30px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
     .form {
         display: flex;
         flex-direction: column;
@@ -90,11 +82,9 @@ $videoFile = '';
 </style>
 
 <body>
-    <div class="container" style="width: 100%;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #333;">
-        <form class="form" action="addBookForm.php<?php echo $editId > 0 ? '?edit_id=' . $editId : ''; ?>" method="post">
+    <div id="bookFormModal">
+        <div class="form-content">
+            <form class="form" action="addBookForm.php<?php echo $editId > 0 ? '?edit_id=' . $editId : ''; ?>" method="post" enctype="multipart/form-data">
             <label for="bookName">Book Name 
                 <input type="text" id="bookName" name="bookName" placeholder="Book Name " value="<?php echo htmlspecialchars($major['major_name_kh'] ?? ''); ?>" required>
             </label>
@@ -105,18 +95,81 @@ $videoFile = '';
                 <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($major['description'] ?? ''); ?></textarea>
             </label>
             <label for="uploadBookFile">Upload Book File
-                <input type="file" id="uploadBookFile" name="uploadBookFile" required>
+                <input type="file" id="uploadBookFile" name="uploadBookFile"  required>
             </label>
              <label for="uploadBookCover">Upload Book Cover
-                <input type="file" id="uploadBookCover" name="uploadBookCover" required>
+                <input type="file" id="uploadBookCover" name="uploadBookCover">
             </label>
             <label for="uploadVideoFile">Upload Video File
                 <input type="file" id="uploadVideoFile" name="uploadVideoFile">
             </label>
+            <label for="majorId" style="display: none;">Major
+                <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="19">
+            </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
-            <button type="button" onclick="closeForm();">Close</button>
-        </form>
+            <button type="button" onclick="document.getElementById('showResult').innerHTML = '';">Close</button>
+            </form>
+        </div>
     </div>
+    
+    <script>
+        setTimeout(() => {
+            const modal = document.getElementById('bookFormModal');
+            if (modal) {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === this) {
+                        document.getElementById('showResult').innerHTML = '';
+                    }
+                });
+            }
+        }, 100);
+    </script>
 </body>
 
 </html>
+<?php 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
+        $bookName = trim($_POST['bookName'] ?? '');
+        $bookAuthor = trim($_POST['bookAuthor'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $majorId = trim($_POST['majorId'] ?? '');
+        
+        $bookFile = $_FILES['uploadBookFile']['name'] ?? '';
+        $bookFileTmp = $_FILES['uploadBookFile']['tmp_name'] ?? '';
+        $bookCover = $_FILES['uploadBookCover']['name'] ?? '';
+        $bookCoverTmp = $_FILES['uploadBookCover']['tmp_name'] ?? '';
+        $videoFile = $_FILES['uploadVideoFile']['name'] ?? '';
+        $videoFileTmp = $_FILES['uploadVideoFile']['tmp_name'] ?? '';
+        
+        $booksFolder = 'uploads/books/'.$bookFile;
+        $coverFolder = 'uploads/covers/'.$bookCover;
+        $videoFolder = 'uploads/videos/'.$videoFile;
+        
+        if (!empty($bookFileTmp) && move_uploaded_file($bookFileTmp, $booksFolder)) {
+            echo "Book file uploaded successfully.";
+        } else if (!empty($bookFileTmp)) {
+            echo "Failed to upload book file.";
+        }
+        
+        if (!empty($bookCoverTmp) && move_uploaded_file($bookCoverTmp, $coverFolder)) {
+            echo "Book cover uploaded successfully.";
+        } else if (!empty($bookCoverTmp)) {
+            echo "Failed to upload book cover.";
+        }
+        
+        if (!empty($videoFileTmp) && move_uploaded_file($videoFileTmp, $videoFolder)) {
+            echo "Video file uploaded successfully.";
+        } else if (!empty($videoFileTmp)) {
+            echo "Failed to upload video file.";
+        }
+        $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
+        
+        if($stmt->execute()) {
+            echo "Book added to database successfully.";
+        } else {
+            echo "Failed to add book to database: " . $stmt->error;
+        }
+        $stmt->close();
+    }
+?>

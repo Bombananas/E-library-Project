@@ -54,6 +54,25 @@ const App = {
         App.showResult('#showResult', '');
     },
 
+    selectMajor(majorId) {
+        window.selectedMajorId = majorId;
+        const addBookBtn = document.getElementById('addBookBtn');
+        const fullListBtn = document.getElementById('fullListBtn');
+        if (addBookBtn) addBookBtn.style.display = 'block';
+        if (fullListBtn) fullListBtn.style.display = 'block';
+    },
+
+    loadAddBookFormModal() {
+        App.loadData('addBookForm.php').then(() => {
+            setTimeout(() => {
+                const majorIdInput = document.getElementById('majorId');
+                const modal = document.getElementById('bookFormModal');
+                if (majorIdInput && window.selectedMajorId) majorIdInput.value = window.selectedMajorId;
+                if (modal) modal.classList.add('show');
+            }, 100);
+        });
+    },
+
     goBack() {
         window.history.back();
     }, 
@@ -69,5 +88,7 @@ const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;
 const editMajor = App.editMajor;
 const closeForm = App.closeForm;
+const selectMajor = App.selectMajor;
+const loadAddBookFormModal = App.loadAddBookFormModal;
 const goBack = App.goBack;
 
