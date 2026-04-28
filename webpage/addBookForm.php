@@ -7,25 +7,22 @@ $description = '';
 $bookfile = '';
 $bookcover = '';
 $viedofile = '';
-if ($editId != 0) {}
+    $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
+        $bookName = trim($_POST['bookName'] ?? '');
+        $bookAuthor = trim($_POST['bookAuthor'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $majorId = trim($_POST['majorId'] ?? '19');
+        $bookfile = file_get_contents($_FILES['uploadBookFile']['tmp_name']) ?? '';
+        $bookcover = file_get_contents($_FILES['uploadBookCover']['tmp_name']) ?? '';
+        $viedofile = file_get_contents($_FILES['uploadVideoFile']['tmp_name']) ?? '';
+        $stmt->bind_param('sssssss', $bookName, $bookAuthor, $description, $bookfile, $bookcover, $viedofile, $majorId);
+        $stmt->execute();
+        echo $stmt->error;
+        $stmt->close();
+        header('Location: bookList.php');
+        }
 
-$stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
-    $bookName = trim($_POST['bookName'] ?? '');
-    $bookAuthor = trim($_POST['bookAuthor'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $majorId = trim($_POST['majorId'] ?? '');
-    $stmt->bind_param('sssssss', $bookName, $bookAuthor, $description, $bookfile, $bookcover, $viedofile, $majorId);
-    $stmt->execute();
-    // Handle file uploads here (e.g., move_uploaded_file)
-    // For example:
-    // if (isset($_FILES['uploadBookFile']) && $_FILES['uploadBookFile']['error'] === UPLOAD_ERR_OK) {
-    //     $bookfile = 'uploads/' . basename($_FILES['uploadBookFile']['name']);
-    //     move_uploaded_file($_FILES['uploadBookFile']['tmp_name'], $bookfile);
-    // }
-    // Similar handling for book cover and video file
-
-}   
 ?>
 <html lang="en">
 <style>
@@ -103,7 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
             <button type="button" onclick="closeForm();">Close</button>
-            <button type="button" onclick="closeForm(); loadData('majorFullList.php?level_id=<?php echo $goBackToLevel > 0 ? $goBackToLevel : $getLevelIdResult->fetch_assoc()['level_id'] ?>')">Go Back</button>
         </form>
     </div>
 </body>
