@@ -4,19 +4,34 @@ $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
 $bookName = '';
 $bookAuthor = '';
 $description = '';
-$bookfile = '';
-$bookcover = '';
-$viedofile = '';
+$bookFile = '';
+$bookCover = '';
+$videoFile = '';
     $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $bookName = trim($_POST['bookName'] ?? '');
         $bookAuthor = trim($_POST['bookAuthor'] ?? '');
         $description = trim($_POST['description'] ?? '');
         $majorId = trim($_POST['majorId'] ?? '19');
-        $bookfile = file_get_contents($_FILES['uploadBookFile']['tmp_name']) ?? '';
-        $bookcover = file_get_contents($_FILES['uploadBookCover']['tmp_name']) ?? '';
-        $viedofile = file_get_contents($_FILES['uploadVideoFile']['tmp_name']) ?? '';
-        $stmt->bind_param('sssssss', $bookName, $bookAuthor, $description, $bookfile, $bookcover, $viedofile, $majorId);
+        $bookFile = file_get_contents($_FILES['uploadBookFile']['name']) ?? '';
+        $bookFile = file_get_contents($_FILES['uploadBookFile']['tmp_name']) ?? '';
+        $bookCover = file_get_contents($_FILES['uploadBookCover']['name']) ?? '';
+        $bookCover = file_get_contents($_FILES['uploadBookCover']['tmp_name']) ?? '';
+        $videoFile = file_get_contents($_FILES['uploadVideoFile']['name']) ?? '';
+        $videoFile = file_get_contents($_FILES['uploadVideoFile']['tmp_name']) ?? '';
+        $booksFolder = 'uploads/books/';
+        $coverFolder = 'uploads/covers/';
+        $videoFolder = 'uploads/videos/';
+        if (!is_dir($booksFolder)) {  
+            mkdir($booksFolder, 0777, true);
+        }
+        if (!is_dir($coverFolder)) {
+            mkdir($coverFolder, 0777, true);
+        }
+        if (!is_dir($videoFolder)) {
+            mkdir($videoFolder, 0777, true);
+        }
+        $stmt->bind_param('sssssss', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
         $stmt->execute();
         echo $stmt->error;
         $stmt->close();
