@@ -1,7 +1,11 @@
 <?php
 require_once 'config.php';
 $goBackToLevel = isset($_GET['level_id_pre']) ? (int)$_GET['level_id_pre'] : 0;
-function getMajorsByLevelId($levelId) {
+$getLevelIdResult = null;
+$backLevelId = $goBackToLevel > 0 
+    ? $goBackToLevel 
+    : ($getLevelIdResult ? $getLevelIdResult->fetch_assoc()['level_id'] : 0);
+function getMajorsByLevelId(int $levelId) {
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE level_id = ?");
     if ($stmt) {
@@ -44,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
 
         if ($editId > 0) {
             $stmt = $conn->prepare("UPDATE tblmajor SET major_name_kh = ?, major_name_en = ?, description = ?, level_id = ? WHERE major_id = ?");
-            $stmt->bind_param('ssisii', $majorNameKh, $majorNameEn, $description, $levelId, $editId);
+            $stmt->bind_param('sssii', $majorNameKh, $majorNameEn, $description, $levelId, $editId);
         } else {
             $stmt = $conn->prepare("INSERT INTO `tblmajor` (`major_name_kh`, `major_name_en`, `description`, `level_id`) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param('ssisi', $majorNameKh, $majorNameEn, $description, $levelId);
+            $stmt->bind_param('sssi', $majorNameKh, $majorNameEn, $description, $levelId);
         }
         if ($stmt) {
             if ($stmt->execute()) {
