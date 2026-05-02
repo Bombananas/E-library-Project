@@ -12,7 +12,7 @@ if (isset($_POST['loginSubmit'])) {
     }
 
     // Query ONLY by username
-    $loginQuery = "SELECT * FROM userinfo WHERE UserName = ?";
+    $loginQuery = "SELECT * FROM tbluser WHERE user_name = ?";
     $stmt = $conn->prepare($loginQuery);
     $stmt->bind_param('s', $userName);
     $stmt->execute();
@@ -23,8 +23,8 @@ if (isset($_POST['loginSubmit'])) {
         $user = $result->fetch_assoc();
 
         // Verify password
-        if (password_verify($password, $user['Password'])) {
-            $userRole = $user['Role'];
+        if (password_verify($password, $user['user_password'])) {
+            $userRole = $user['role'];
             session_start();
             $_SESSION['user_role'] = $userRole;
             header('Location: index.php');
@@ -86,7 +86,7 @@ if (isset($_POST['loginSubmit'])) {
             <label for="password">Password
                 <input type="password" id="password" name="password" placeholder="Password" required>
             </label>
-            <button type="submit" name="loginSubmit">Login</button>
+            <button type="submit" name="loginSubmit<?php echo $userRole = $_SESSION['user_role'] ?? null; ?>">Login</button>
             <button type="button" onclick="closeForm()">Close</button>
         </form>
     </div>
