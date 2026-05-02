@@ -2,8 +2,6 @@
 require_once 'config.php';
 
 /**
- * Update a level record in tbllevel.
- *
  * @param mysqli $conn
  * @param int $levelID
  * @param string $levelName

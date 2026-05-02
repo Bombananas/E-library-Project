@@ -3,7 +3,6 @@ const App = {
         const el = document.querySelector(selector);
         if (el) el.innerHTML = html;
     },
-
     openUrl(url, onSuccess) {
         return fetch(url, { credentials: 'same-origin' })
             .then(response => {
@@ -80,6 +79,13 @@ const App = {
     loadData('addMajorForm.php?edit_id=' + id);
     fetch('majorList.php?edit_id=' + id + '&ajax=1', { credentials: 'same-origin' })
         .then(res => res.json())
+},
+addClass(className, element) {
+    document.querySelectorAll('.levelLink').forEach(btn => btn.classList.remove('activateLevelLink'));
+    const elements = document.getElementById(element);
+    if (elements) {
+        elements.classList.add(className);
+    }
 }
 };
 
@@ -91,4 +97,4 @@ const closeForm = App.closeForm;
 const selectMajor = App.selectMajor;
 const loadAddBookFormModal = App.loadAddBookFormModal;
 const goBack = App.goBack;
-
+const addClass = App.addClass;

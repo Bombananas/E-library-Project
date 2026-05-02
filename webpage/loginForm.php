@@ -86,7 +86,7 @@ if (isset($_POST['loginSubmit'])) {
             <label for="password">Password
                 <input type="password" id="password" name="password" placeholder="Password" required>
             </label>
-            <button type="submit" name="loginSubmit<?php echo $userRole = $_SESSION['user_role'] ?? null; ?>">Login</button>
+            <button type="submit" name="loginSubmit">Login</button>
             <button type="button" onclick="closeForm()">Close</button>
         </form>
     </div>

@@ -1,6 +1,7 @@
 <?php
 require_once 'config.php';
 $levelId = isset($_GET['level_id']) ? (int)$_GET['level_id'] : null;
+$userRole = isset($_GET['userrole']) ? $_GET['userrole'] : null;
 $majors = [];
 if (isset($_GET['delete'])) {
     $deleteID = (int)$_GET['delete'];
@@ -32,6 +33,7 @@ if ($levelId !== null) {
 <style>
     .filtercontainer {
         display: flex;
+        margin-top: 1em;
         gap: 12px;
         align-items: center;
         font-family: sans-serif;
@@ -89,7 +91,7 @@ if ($levelId !== null) {
                             echo '<br>';
                         }
                 ?>
-                        <button class="pill" type="button" data-major-id="<?php echo $row['major_id']; ?>" onclick="selectMajor(<?php echo $row['major_id']; ?>)"><?php echo htmlspecialchars($row["major_name_kh"]) ?> / <?php echo htmlspecialchars($row["major_name_en"]) ?></button>
+                        <button class="pill" type="button" data-major-id="<?php echo $row['major_id']; ?>" <?php if($userRole != null):?> onclick="selectMajor(<?php echo $row['major_id']; ?>)"<?php endif; ?>><?php echo htmlspecialchars($row["major_name_kh"]) ?> / <?php echo htmlspecialchars($row["major_name_en"]) ?></button>
 
 
                 <?php
@@ -100,9 +102,9 @@ if ($levelId !== null) {
             </div>
         </div>
     </section>
-<?php if ($levelId !== null): ?>
-    <div class="button">
-        <button type="button" onclick=" loadData('majorFullList.php?level_id=<?php echo $levelId ?>');">See The Full List Of Majors</button>
-    </div>
-<?php endif; ?>
+        <?php if ($levelId !== null && $userRole == 'Admin'): ?>
+            <div class="button">
+                <button type="button" onclick=" loadData('majorFullList.php?level_id=<?php echo $levelId ?>');">See The Full List Of Majors</button>
+            </div>
+        <?php endif; ?>
 </div>

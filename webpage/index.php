@@ -16,13 +16,19 @@ $userRole = $_SESSION['user_role'] ?? null;
 <body>
     <header class="banner">
         <div class="navbar" >
-            <div class="logo">
+            <div class="logo" style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                <img src="image/schoollogo.png" alt="School Logo" style="width: 50px;">
                 <h1>NPIT E-Library</h1>
             </div>
             <div class="navLinks">
-                <button type="button" onclick="closeForm(); loadData('loginForm.php')">Login</button>
-                <?php if ($userRole == 'admin'): ?>
-                    <h1><button type="button" onclick="closeForm(); loadData('registerForm.php')">Register</button></h1>
+                <?php if ($userRole == null): ?>
+                    <button type="button" onclick="closeForm(); loadData('loginForm.php')">Login</button>
+                <?php endif; ?>
+                <?php if ($userRole != null): ?>
+                    <button type="button" onclick="window.location.href='logout.php'">Logout</button>
+                <?php endif; ?>
+                <?php if ($userRole == 'Admin'): ?>
+                    <button type="button" onclick="closeForm(); loadData('registerForm.php')">Register</button>
                     <?php endif; ?>
             </div>
         </div>
@@ -31,16 +37,19 @@ $userRole = $_SESSION['user_role'] ?? null;
     <main class="mainBody">
         <div class="contentBody">
             <aside class="sideBar">
+                <?php if ($userRole == 'Admin'): ?>
                 <div class="seeLevelList">
                     <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
                 </div>
+                <?php endif; ?>
                 <?php
                 include("leveldata.php");
                 ?>
+                <?php if ($userRole == 'Admin'): ?>
                 <div class="seeLevelList">
                     <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
                 </div>
-                
+                <?php endif; ?>
             </aside>
             <section class="mainContent">
                 <div class="subjectSelect">
@@ -51,8 +60,8 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <article class="contentDisplay">
                     <div class="button">
                         <button type="button" id="fullListBtn" style="display: none;" onclick=" loadData('bookList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
+                        <button type="button" id="addBookBtn" class="addBookButton" style="display: none;" onclick="loadAddBookFormModal()">Add Book</button>
                     </div>
-                    <button type="button" id="addBookBtn" class="addBookButton" style="display: none;" onclick="loadAddBookFormModal()">Add Book</button>
                 </article>
             </section>
         </div>
