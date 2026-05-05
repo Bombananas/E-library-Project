@@ -68,7 +68,7 @@ if ($majorId !== null) {
                         <p>Book Description: <?php echo htmlspecialchars($book['description']); ?></p>
                     </div>
                     <div class="actionBtn">
-                        <a href="addBookForm.php?edit_id=<?php echo $book['book_id']; ?>">edit</a>
+                        <a href="#" onclick="loadData('addBookForm.php?edit_id=' + <?php echo $book['book_id']; ?>); return false;">edit</a>
                         <a href="addBookForm.php?delete_id=<?php echo $book['book_id']; ?>" onclick="return confirm('Are you sure you want to delete this book?');">delete</a>
                     </div>
                 </li>

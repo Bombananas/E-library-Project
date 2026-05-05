@@ -118,19 +118,19 @@ if ($deleteId > 0) {
                 <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($book['description'] ?? ''); ?></textarea>
             </label>
             <label for="uploadBookFile">Upload Book File
-                <input type="file" id="uploadBookFile" name="uploadBookFile" value="<?php echo htmlspecialchars($book['book_source'] ?? ''); ?>" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                <input type="file" id="uploadBookFile" name="uploadBookFile" value="<?php echo htmlspecialchars($book['book_source'] ?? ''); ?>" require>
             </label>
              <label for="uploadBookCover">Upload Book Cover
-                <input type="file" id="uploadBookCover" name="uploadBookCover" value="<?php echo htmlspecialchars($book['book_cover'] ?? ''); ?>" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                <input type="file" id="uploadBookCover" name="uploadBookCover" value="<?php echo htmlspecialchars($book['book_cover'] ?? ''); ?>" require>
             </label>
             <label for="uploadVideoFile">Upload Video File
-                <input type="file" id="uploadVideoFile" name="uploadVideoFile" value="<?php echo htmlspecialchars($book['book_video'] ?? ''); ?>" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                <input type="file" id="uploadVideoFile" name="uploadVideoFile" value="<?php echo htmlspecialchars($book['book_video'] ?? ''); ?>" >
             </label>
             <label for="majorId" style="display: none;">Major
                 <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? '19'); ?>">
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
-            <button type="button"   onclick="<?php if($editId > 0): ?>window.history.back()<?php else:?>document.getElementById('showResult').innerHTML = '';<?php endif; ?>">Close</button>
+            <button type="button"   onclick="document.getElementById('showResult').innerHTML = '';">Close</button>
             </form>
             <?php echo $editId; ?>
         </div>
@@ -188,7 +188,6 @@ if ($deleteId > 0) {
         }
         
         if ($editId > 0) {
-            // Update existing book
             $bookFileParam = !empty($bookFile) ? $bookFile : ($book['book_source'] ?? '');
             $bookCoverParam = !empty($bookCover) ? $bookCover : ($book['book_cover'] ?? '');
             $videoFileParam = !empty($videoFile) ? $videoFile : ($book['book_video'] ?? '');
@@ -204,8 +203,7 @@ if ($deleteId > 0) {
                 echo "Failed to update book: " . $stmt->error;
             }
             $stmt->close();
-        } else {
-            // Insert new book
+
             $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
             

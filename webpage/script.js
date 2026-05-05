@@ -59,16 +59,13 @@ const App = {
         const fullListBtn = document.getElementById('fullListBtn');
         if (window.userRole && addBookBtn) addBookBtn.style.display = 'block';
         if (fullListBtn) fullListBtn.style.display = 'block';
-        // Load books for the selected major
         App.openUrl('bookList.php?major_id=' + majorId, html => {
             const contentDisplay = document.querySelector('.contentDisplay');
             if (contentDisplay) {
-                // Remove old book list container if exists
                 const oldBookListContainer = contentDisplay.querySelector('.bookListContainer');
                 if (oldBookListContainer) {
                     oldBookListContainer.remove();
                 }
-                // Add new book list after buttons
                 contentDisplay.insertAdjacentHTML('beforeend', html);
             }
         });

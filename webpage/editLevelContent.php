@@ -21,7 +21,6 @@ function editLevelContent($conn, $levelID, $levelName, $levelTime, $levelDescrip
     return $result;
 }
 
-// Optional API endpoint handler (form POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['level_id'])) {
     $levelID = (int) $_POST['level_id'];
     $levelName = trim($_POST['level_name'] ?? '');
