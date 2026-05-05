@@ -16,7 +16,7 @@ if ($majorId !== null) {
     $stmt->execute();
     $majorNameResult = $stmt->get_result();
     $majorNameRow = $majorNameResult->fetch_assoc();
-    $stmt->close(); 
+    $stmt->close();
 }
 ?>
 <style>
@@ -67,8 +67,13 @@ if ($majorId !== null) {
                         <p>Author: <?php echo htmlspecialchars($book['book_author']); ?></p>
                         <p>Book Description: <?php echo htmlspecialchars($book['description']); ?></p>
                     </div>
+                    <div class="actionBtn">
+                        <a href="addBookForm.php?edit_id=<?php echo $book['book_id']; ?>">edit</a>
+                        <a href="addBookForm.php?delete_id=<?php echo $book['book_id']; ?>" onclick="return confirm('Are you sure you want to delete this book?');">delete</a>
+                    </div>
                 </li>
             <?php endforeach; ?>
+            <button type="button" onclick="closeForm()">Close</button>
         </ul>
     <?php else: ?>
         <p>No books found for this major.</p>

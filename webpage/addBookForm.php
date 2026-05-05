@@ -1,12 +1,35 @@
 <?php
 require_once 'config.php';
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
+$deleteId = isset($_GET['delete_id']) ? (int)$_GET['delete_id'] : 0;
+$major = null;
 
+if ($editId > 0) {
+    $stmt = $conn->prepare("SELECT * FROM tblbook WHERE book_id = ?");
+    $stmt->bind_param('i', $editId);
+    $stmt->execute();
+    $book = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+} else {
+    $book = null;
+}
+if ($deleteId > 0) {
+    $stmt = $conn->prepare("DELETE FROM tblbook WHERE book_id = ?");
+    $stmt->bind_param('i', $deleteId);
+    if ($stmt->execute()) {
+        echo "Book deleted successfully.";
+        header('Location: index.php');
+        exit;
+    } else {
+        echo "Failed to delete book: " . $stmt->error;
+    }
+    $stmt->close();
+}
 ?>
 <html lang="en">
 <style>
     #bookFormModal {
-        display: none;
+        display: flex;
         position: fixed;
         z-index: 2000;
         left: 0;
@@ -86,29 +109,30 @@ $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
         <div class="form-content">
             <form class="form" action="addBookForm.php<?php echo $editId > 0 ? '?edit_id=' . $editId : ''; ?>" method="post" enctype="multipart/form-data">
             <label for="bookName">Book Name 
-                <input type="text" id="bookName" name="bookName" placeholder="Book Name " value="<?php echo htmlspecialchars($major['major_name_kh'] ?? ''); ?>" required>
+                <input type="text" id="bookName" name="bookName" placeholder="Book Name " value="<?php echo htmlspecialchars($book['book_name'] ?? ''); ?>" required>
             </label>
             <label for="bookAuthor">Book Author
-                 <input type="text" id="bookAuthor" name="bookAuthor" placeholder="Book Author" value="<?php echo htmlspecialchars($major['major_name_en'] ?? ''); ?>" required>
+                 <input type="text" id="bookAuthor" name="bookAuthor" placeholder="Book Author" value="<?php echo htmlspecialchars($book['book_author'] ?? ''); ?>" required>
             </label>
             <label for="description">Description
-                <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($major['description'] ?? ''); ?></textarea>
+                <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($book['description'] ?? ''); ?></textarea>
             </label>
             <label for="uploadBookFile">Upload Book File
-                <input type="file" id="uploadBookFile" name="uploadBookFile"  required>
+                <input type="file" id="uploadBookFile" name="uploadBookFile" value="<?php echo htmlspecialchars($book['book_source'] ?? ''); ?>" <?php echo $editId > 0 ? '' : 'required'; ?>>
             </label>
              <label for="uploadBookCover">Upload Book Cover
-                <input type="file" id="uploadBookCover" name="uploadBookCover" required>
+                <input type="file" id="uploadBookCover" name="uploadBookCover" value="<?php echo htmlspecialchars($book['book_cover'] ?? ''); ?>" <?php echo $editId > 0 ? '' : 'required'; ?>>
             </label>
             <label for="uploadVideoFile">Upload Video File
-                <input type="file" id="uploadVideoFile" name="uploadVideoFile">
+                <input type="file" id="uploadVideoFile" name="uploadVideoFile" value="<?php echo htmlspecialchars($book['book_video'] ?? ''); ?>" <?php echo $editId > 0 ? '' : 'required'; ?>>
             </label>
             <label for="majorId" style="display: none;">Major
-                <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="19">
+                <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? '19'); ?>">
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
-            <button type="button" onclick="document.getElementById('showResult').innerHTML = '';">Close</button>
+            <button type="button"   onclick="<?php if($editId > 0): ?>window.history.back()<?php else:?>document.getElementById('showResult').innerHTML = '';<?php endif; ?>">Close</button>
             </form>
+            <?php echo $editId; ?>
         </div>
     </div>
     
@@ -162,14 +186,35 @@ $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
         } else if (!empty($videoFileTmp)) {
             echo "Failed to upload video file.";
         }
-        $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
         
-        if($stmt->execute()) {
-            echo "Book added to database successfully.";
+        if ($editId > 0) {
+            // Update existing book
+            $bookFileParam = !empty($bookFile) ? $bookFile : ($book['book_source'] ?? '');
+            $bookCoverParam = !empty($bookCover) ? $bookCover : ($book['book_cover'] ?? '');
+            $videoFileParam = !empty($videoFile) ? $videoFile : ($book['book_video'] ?? '');
+            
+            $stmt = $conn->prepare("UPDATE tblbook SET book_name = ?, book_author = ?, description = ?, book_source = ?, book_cover = ?, book_video = ? WHERE book_id = ?");
+            $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFileParam, $bookCoverParam, $videoFileParam, $editId);
+            
+            if($stmt->execute()) {
+                echo "Book updated successfully.";
+                header('Location: index.php');
+                exit;
+            } else {
+                echo "Failed to update book: " . $stmt->error;
+            }
+            $stmt->close();
         } else {
-            echo "Failed to add book to database: " . $stmt->error;
+            // Insert new book
+            $stmt = $conn->prepare("INSERT into tblbook (book_name, book_author, description, book_source, book_cover, book_video, major_id) values (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
+            
+            if($stmt->execute()) {
+                echo "Book added to database successfully.";
+            } else {
+                echo "Failed to add book to database: " . $stmt->error;
+            }
+            $stmt->close();
         }
-        $stmt->close();
     }
 ?>

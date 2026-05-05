@@ -55,11 +55,11 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <div class="subjectSelect"></div>
                 <article class="contentDisplay">
                     <div class="button">
-                        <button type="button" id="fullListBtn" style="display: none;" onclick=" loadData('bookList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
+                        <button type="button" id="fullListBtn" style="display: none;" onclick=" loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
                         <button type="button" id="addBookBtn" class="addBookButton" style="display: none;" onclick="loadAddBookFormModal()">Add Book</button>
                     </div>
                     <?php
-                    include("bookList.php");
+                    include("booklist.php");
                     ?>
                 </article>
             </section>

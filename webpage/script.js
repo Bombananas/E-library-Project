@@ -59,6 +59,19 @@ const App = {
         const fullListBtn = document.getElementById('fullListBtn');
         if (addBookBtn) addBookBtn.style.display = 'block';
         if (fullListBtn) fullListBtn.style.display = 'block';
+        // Load books for the selected major
+        App.openUrl('bookList.php?major_id=' + majorId, html => {
+            const contentDisplay = document.querySelector('.contentDisplay');
+            if (contentDisplay) {
+                // Remove old book list container if exists
+                const oldBookListContainer = contentDisplay.querySelector('.bookListContainer');
+                if (oldBookListContainer) {
+                    oldBookListContainer.remove();
+                }
+                // Add new book list after buttons
+                contentDisplay.insertAdjacentHTML('beforeend', html);
+            }
+        });
     },
 
     loadAddBookFormModal() {
@@ -67,6 +80,15 @@ const App = {
                 const majorIdInput = document.getElementById('majorId');
                 const modal = document.getElementById('bookFormModal');
                 if (majorIdInput && window.selectedMajorId) majorIdInput.value = window.selectedMajorId;
+                if (modal) modal.classList.add('show');
+            }, 100);
+        });
+    },
+
+    editBook(bookId) {
+        App.loadData('addBookForm.php?edit_id=' + bookId).then(() => {
+            setTimeout(() => {
+                const modal = document.getElementById('bookFormModal');
                 if (modal) modal.classList.add('show');
             }, 100);
         });
@@ -96,5 +118,6 @@ const editMajor = App.editMajor;
 const closeForm = App.closeForm;
 const selectMajor = App.selectMajor;
 const loadAddBookFormModal = App.loadAddBookFormModal;
+const editBook = App.editBook;
 const goBack = App.goBack;
 const addClass = App.addClass;
