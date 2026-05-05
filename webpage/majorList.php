@@ -91,7 +91,7 @@ if ($levelId !== null) {
                             echo '<br>';
                         }
                 ?>
-                        <button class="pill" id="major-id-button-<?php echo $row['major_id']; ?>" type="button" data-major-id="<?php echo $row['major_id']; ?>" <?php if($userRole != null):?> onclick="selectMajor(<?php echo $row['major_id']; ?>)"<?php endif; ?>><?php echo htmlspecialchars($row["major_name_kh"]) ?> / <?php echo htmlspecialchars($row["major_name_en"]) ?></button>
+                        <button class="pill" id="major-id-button-<?php echo $row['major_id']; ?>" type="button" data-major-id="<?php echo $row['major_id']; ?>" onclick="selectMajor(<?php echo $row['major_id']; ?>)"><?php echo htmlspecialchars($row["major_name_kh"]) ?> / <?php echo htmlspecialchars($row["major_name_en"]) ?></button>
 
 
                 <?php

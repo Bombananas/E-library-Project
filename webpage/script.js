@@ -57,7 +57,7 @@ const App = {
         window.selectedMajorId = majorId;
         const addBookBtn = document.getElementById('addBookBtn');
         const fullListBtn = document.getElementById('fullListBtn');
-        if (addBookBtn) addBookBtn.style.display = 'block';
+        if (window.userRole && addBookBtn) addBookBtn.style.display = 'block';
         if (fullListBtn) fullListBtn.style.display = 'block';
         // Load books for the selected major
         App.openUrl('bookList.php?major_id=' + majorId, html => {

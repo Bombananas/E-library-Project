@@ -69,6 +69,9 @@ $userRole = $_SESSION['user_role'] ?? null;
     <footer class="footer">
         <p>&copy; វិទ្យាស្ថានជាតិពហុបច្ចេកទេសកម្ពុជា NPIT. All rights reserved.</p>
     </footer>
+    <script>
+        window.userRole = '<?php echo addslashes($userRole ?? ''); ?>';
+    </script>
     <script src="script.js"></script>
 </body>
 
