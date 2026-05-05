@@ -98,7 +98,7 @@ $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
                 <input type="file" id="uploadBookFile" name="uploadBookFile"  required>
             </label>
              <label for="uploadBookCover">Upload Book Cover
-                <input type="file" id="uploadBookCover" name="uploadBookCover">
+                <input type="file" id="uploadBookCover" name="uploadBookCover" required>
             </label>
             <label for="uploadVideoFile">Upload Video File
                 <input type="file" id="uploadVideoFile" name="uploadVideoFile">
@@ -134,16 +134,16 @@ $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
         $description = trim($_POST['description'] ?? '');
         $majorId = trim($_POST['majorId'] ?? '');
         
-        $bookFile = $_FILES['uploadBookFile']['name'] ?? '';
+        $bookFile = basename($_FILES['uploadBookFile']['name'] ?? '');
         $bookFileTmp = $_FILES['uploadBookFile']['tmp_name'] ?? '';
-        $bookCover = $_FILES['uploadBookCover']['name'] ?? '';
+        $bookCover = basename($_FILES['uploadBookCover']['name'] ?? '');
         $bookCoverTmp = $_FILES['uploadBookCover']['tmp_name'] ?? '';
-        $videoFile = $_FILES['uploadVideoFile']['name'] ?? '';
+        $videoFile = basename($_FILES['uploadVideoFile']['name'] ?? '');
         $videoFileTmp = $_FILES['uploadVideoFile']['tmp_name'] ?? '';
         
-        $booksFolder = 'uploads/books/'.$bookFile;
-        $coverFolder = 'uploads/covers/'.$bookCover;
-        $videoFolder = 'uploads/videos/'.$videoFile;
+        $booksFolder = __DIR__ . '/uploads/books/' . $bookFile;
+        $coverFolder = __DIR__ . '/uploads/covers/' . $bookCover;
+        $videoFolder = __DIR__ . '/uploads/videos/' . $videoFile;
         
         if (!empty($bookFileTmp) && move_uploaded_file($bookFileTmp, $booksFolder)) {
             echo "Book file uploaded successfully.";

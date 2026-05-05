@@ -52,16 +52,15 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <?php endif; ?>
             </aside>
             <section class="mainContent">
-                <div class="subjectSelect">
-                    <?php
-                    include("majorlist.php");
-                    ?>
-                </div>
+                <div class="subjectSelect"></div>
                 <article class="contentDisplay">
                     <div class="button">
                         <button type="button" id="fullListBtn" style="display: none;" onclick=" loadData('bookList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
                         <button type="button" id="addBookBtn" class="addBookButton" style="display: none;" onclick="loadAddBookFormModal()">Add Book</button>
                     </div>
+                    <?php
+                    include("bookList.php");
+                    ?>
                 </article>
             </section>
         </div>
