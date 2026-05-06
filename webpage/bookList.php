@@ -1,7 +1,16 @@
 <?php
 require_once 'config.php';
 $majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : 18;
+$levelName = '';
+$stmt = $conn->prepare("SELECT level_name FROM tbllevel WHERE level_id = (SELECT level_id FROM tblmajor WHERE major_id = ?)");
+$stmt->bind_param('i', $majorId);
+$stmt->execute();
+$levelNameResult = $stmt->get_result();
+if ($levelNameRow = $levelNameResult->fetch_assoc()) {
+    $levelName = $levelNameRow['level_name'];
+}
 $books = [];
+$majorNameRow = null;
 if ($majorId !== null) {
     $stmt = $conn->prepare("SELECT * FROM tblbook WHERE major_id = ?");
     $stmt->bind_param('i', $majorId);
@@ -16,7 +25,7 @@ if ($majorId !== null) {
     $stmt->execute();
     $majorNameResult = $stmt->get_result();
     $majorNameRow = $majorNameResult->fetch_assoc();
-    $stmt->close(); 
+    $stmt->close();
 }
 ?>
 <style>
@@ -25,8 +34,10 @@ if ($majorId !== null) {
         background-color: #f5f5f5;
         border-radius: 8px;
         max-width: 100%;
+        max-height: 100%;
         margin: 0 auto;
-        cursor: pointer;
+        overflow-y: scroll;
+        scrollbar-width: thin;
     }
 
     .bookList {
@@ -57,7 +68,7 @@ if ($majorId !== null) {
 </style>
 <div class="bookListContainer">
     <?php if (count($books) > 0): ?>
-        <h2><?php echo htmlspecialchars($majorNameRow['major_name_kh'] . ' / ' . $majorNameRow['major_name_en']); ?></h2>
+        <h2><?php echo htmlspecialchars($levelName . '  :  ' . $majorNameRow['major_name_kh'] . ' / ' . $majorNameRow['major_name_en']); ?></h2>
         <ul class="bookList">
             <?php foreach ($books as $book): ?>
                 <li class="bookItem">

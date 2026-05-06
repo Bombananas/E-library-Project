@@ -12,20 +12,21 @@ if ($result->num_rows > 0) {
     exit;
 }
 $registerQuery = "INSERT INTO tbluser (user_name, user_password) VALUES (?, ?)";
-if(isset($_POST['registerSubmit'])) {
-if (empty($userName) || empty($password)) {
-    echo 'Username and password cannot be empty.';
-    exit;
+if (isset($_POST['registerSubmit'])) {
+    if (empty($userName) || empty($password)) {
+        echo 'Username and password cannot be empty.';
+        exit;
+    }
+    $stmt = $conn->prepare($registerQuery);
+    $stmt->bind_param('ss', $userName, $password);
+    if ($stmt->execute()) {
+        echo 'Registration successful. You can now log in.';
+        header('Location: index.php');
+        exit;
+    } else {
+        echo 'Registration failed: ' . htmlspecialchars($stmt->error);
+    }
 }
-$stmt = $conn->prepare($registerQuery);
-$stmt->bind_param('ss', $userName, $password);
-if ($stmt->execute()) {
-    echo 'Registration successful. You can now log in.';
-    header('Location: index.php');
-    exit;
-} else {
-    echo 'Registration failed: ' . htmlspecialchars($stmt->error);
-}}
 ?>
 <style>
     .form {
@@ -37,7 +38,7 @@ if ($stmt->execute()) {
         margin-bottom: 10px;
     }
 
-    .form input {   
+    .form input {
         padding: 10px;
         margin-bottom: 20px;
     }
@@ -49,13 +50,16 @@ if ($stmt->execute()) {
         border: none;
         cursor: pointer;
     }
+
     .form button:hover {
         background-color: #0056b3;
     }
+
     .form input {
         float: right;
         width: 250px;
     }
+
     .form label {
         display: flex;
         justify-content: space-between;
@@ -63,17 +67,21 @@ if ($stmt->execute()) {
         color: white;
     }
 </style>
+
 <body>
     <div class="container" style="width: 100%;
         margin: 0 auto;
         padding: 20px;
         background-color: #333;">
-        <form class="form" action="registerForm.php" method="post">
+        <form class="form" action="registerForm.php" onsubmit="return App.passwordComfire()" method="post">
             <label for="userName">Username
                 <input type="text" id="userName" name="userName" placeholder="Username" value="<?php echo htmlspecialchars($userName); ?>" required>
             </label>
             <label for="password">Password
                 <input type="password" id="password" name="password" placeholder="Password" required>
+            </label>
+            <label for="confirmPassword">Confirm Password
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
             </label>
             <button type="submit" name="registerSubmit">Register</button>
             <button type="button" onclick="closeForm()">Close</button>

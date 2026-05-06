@@ -10,6 +10,7 @@
     align-items: center;
     margin: 0 0 1em 0;
 }
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -17,6 +18,7 @@
     max-width: 1920px;
     width: 90%;
 }
+
 .navbar .navLinks button {
     padding: 10px 20px;
     border: none;
@@ -25,9 +27,11 @@
     font-size: 1em;
     cursor: pointer;
 }
+
 .navbar .navLinks button:hover {
     background-color: #0056b3;
 }
+
 .bannerContainer {
     max-width: 1920px;
     height: 384px;
@@ -83,14 +87,16 @@
     border: none;
     cursor: pointer;
 }
+
 .addBookButton {
-        padding: 10px;
-        background-color: #007bff;
-        width: 100%;
-        color: white;
-        border: none;
-        cursor: pointer;
+    padding: 10px;
+    background-color: #007bff;
+    width: 100%;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
+
 .levelHeader {
     width: 100%;
     display: flex;
@@ -99,11 +105,13 @@
     text-align: center;
     background-color: #f2f2f2;
 }
+
 .levelHeader h1 {
     font-size: 1.7em;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #333;
 }
+
 .addBookButton:hover {
     background-color: #0056b3;
 }
@@ -118,6 +126,7 @@
     width: 100%;
     display: none;
 }
+
 .displayMajorList {
     display: block;
 }
@@ -139,39 +148,54 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+.button button {
+        padding: 10px;
+        background-color: #007bff;
+        width: 100%;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .button button:hover {
+        background-color: #0056b3;
+    }
 .contentTable {
-        width: 100%;
-        border-collapse: collapse;
-    }
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    .contentTable th,
-    .contentTable td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
+.contentTable th,
+.contentTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
 
-    .contentTable th, .contentTable td {
-        background-color: #f2f2f2;
-        text-align: left;
-    }
+.contentTable th,
+.contentTable td {
+    background-color: #f2f2f2;
+    text-align: left;
+}
 
-    .deletecontent,
-    .editcontent {
-        color: #007bff;
-        text-decoration: none;
-        margin-right: 10px;
-    }
+.deletecontent,
+.editcontent {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
 
-    .deletecontent:hover,
-    .editcontent:hover {
-        text-decoration: underline;
-    }
-    .footer {
-        text-align: left;
-        padding: 1em 0;
-        width: 100%;
-        bottom: 0;
-    }
-        .footer p{
-            margin-left: 3em;  
-    }
+.deletecontent:hover,
+.editcontent:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    text-align: left;
+    padding: 1em 0;
+    width: 100%;
+    bottom: 0;
+}
+
+.footer p {
+    margin-left: 3em;
+}

@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-require_once 'editLevelContent.php';
+
 
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
 $levelIdPre = isset($_GET['level_idpre']) ? (int)$_GET['level_idpre'] : 0;
@@ -26,7 +26,6 @@ if ($fetchId > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
-    $editId = (int)($_POST['edit_id'] ?? 0);
     $levelName = trim($_POST['levelName'] ?? '');
     $levelTime = trim($_POST['levelTime'] ?? '');
     $levelDescription = trim($_POST['levelDescription'] ?? '');
@@ -37,7 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     }
 
     if ($editId > 0) {
-        $updated = editLevelContent($conn, $editId, $levelName, $levelTime, $levelDescription);
+        $stmt = $conn->prepare("UPDATE `tbllevel` SET `level_name` = ?, `timetostudy` = ?, `description` = ? WHERE `level_id` = ?");
+        if (!$stmt) {   
+            echo 'Prepare failed: ' . htmlspecialchars($conn->error);
+            exit;
+        }
+        $stmt->bind_param('sssi', $levelName, $levelTime, $levelDescription, $editId);
+        $updated = $stmt->execute();    
         if ($updated) {
             header('location:index.php');
             exit;
@@ -59,9 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         }
     }
 }
-$now = new DateTime();
-$now->setTimezone(new DateTimeZone('Asia/Phnom_Penh'));
-$currentTime =  $now->format('H:i');
 ?>
 <html lang="en">
 <style>
@@ -74,7 +76,7 @@ $currentTime =  $now->format('H:i');
         margin-bottom: 10px;
     }
 
-    .form input {   
+    .form input {
         padding: 10px;
         margin-bottom: 20px;
     }
@@ -86,13 +88,16 @@ $currentTime =  $now->format('H:i');
         border: none;
         cursor: pointer;
     }
+
     .form button:hover {
         background-color: #0056b3;
     }
+
     .form input {
         float: right;
         width: 250px;
     }
+
     .form label {
         display: flex;
         justify-content: space-between;

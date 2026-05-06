@@ -28,11 +28,6 @@ if ($editId > 0) {
         justify-content: center;
         align-items: center;
     }
-
-    #bookFormModal.show {
-        display: flex;
-    }
-
     .form-content {
         background-color: #333;
         padding: 30px;
@@ -123,25 +118,11 @@ if ($editId > 0) {
                     <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? 0); ?>">
                 </label>
                 <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
-                <button type="button" onclick="document.getElementById('showResult').innerHTML = '';">Close</button>
+                <button type="button" onclick="closeForm()">Close</button>
             </form>
         </div>
     </div>
-
-    <script>
-        setTimeout(() => {
-            const modal = document.getElementById('bookFormModal');
-            if (modal) {
-                modal.addEventListener('click', function(event) {
-                    if (event.target === this) {
-                        document.getElementById('showResult').innerHTML = '';
-                    }
-                });
-            }
-        }, 100);
-    </script>
 </body>
-
 </html>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {

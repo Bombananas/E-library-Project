@@ -61,20 +61,6 @@ if ($levelId !== null) {
     .pill:hover:not(.active) {
         background-color: #f0f0f0;
     }
-
-
-    .button button {
-        padding: 10px;
-        background-color: #007bff;
-        width: 100%;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-
-    .button button:hover {
-        background-color: #0056b3;
-    }
 </style>
 
 <div class="container">

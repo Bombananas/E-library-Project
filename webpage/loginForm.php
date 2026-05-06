@@ -11,7 +11,6 @@ if (isset($_POST['loginSubmit'])) {
         exit;
     }
 
-    // Query ONLY by username
     $loginQuery = "SELECT * FROM tbluser WHERE user_name = ?";
     $stmt = $conn->prepare($loginQuery);
     $stmt->bind_param('s', $userName);
@@ -22,7 +21,6 @@ if (isset($_POST['loginSubmit'])) {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Verify password
         if (password_verify($password, $user['user_password'])) {
             $userRole = $user['role'];
             session_start();

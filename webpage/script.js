@@ -1,4 +1,11 @@
 const App = {
+    preventDefault(e) {
+    e.preventDefault();},
+    preventKeys(e) {
+    if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.key)) {
+        e.preventDefault();
+    }
+},
     showResult(selector, html) {
         const el = document.querySelector(selector);
         if (el) el.innerHTML = html;
@@ -14,6 +21,9 @@ const App = {
     },
 
     loadData(url) {
+        window.addEventListener('wheel', App.preventDefault, { passive: false });
+        window.addEventListener('touchmove', App.preventDefault, { passive: false });
+        window.addEventListener('keydown', App.preventKeys, false);
         return App.openUrl(url, html => App.showResult('#showResult', html));
     },
 
@@ -51,6 +61,9 @@ const App = {
 
     closeForm() {
         App.showResult('#showResult', '');
+        window.removeEventListener('wheel', App.preventDefault);
+        window.removeEventListener('touchmove', App.preventDefault);
+        window.removeEventListener('keydown', App.preventKeys);
     },
 
     selectMajor(majorId) {
@@ -104,9 +117,18 @@ addClass(className, element) {
         elements.classList.add(className);
         document.querySelector('.subjectSelect').classList.add('displayMajorList');
     }
+},
+passwordComfire() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return false;
+    }
+    return true;
 }
 };
-
+const disableScroll = App.disableScroll;
 const loadData = App.loadData;
 const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;

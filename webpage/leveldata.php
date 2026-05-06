@@ -7,7 +7,7 @@ if (mysqli_num_rows($displayList) > 0) {
         $levelName = $row["level_name"];
     ?>
             <div class="levelLink" id="levelLink-<?php echo $row['level_id'] ?>">
-                <h2><button  onclick="addClass('activateLevelLink', 'levelLink-<?php echo $row['level_id'] ?>'); loadIntoSubjectSelect('majorList.php?level_id=<?php echo $row['level_id']?>&userrole=<?php echo $userRole ?>') "><?php echo (string)$levelName ?></button></h2>
+                <h2><button  onclick="addClass('activateLevelLink', 'levelLink-<?php echo $row['level_id'] ?>'); loadIntoSubjectSelect('majorList.php?level_id=<?php echo $row['level_id']?>&userrole=<?php echo $userRole ?>')"><?php echo (string)$levelName ?></button></h2>
             </div>
 <?php
 }
