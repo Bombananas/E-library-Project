@@ -11,7 +11,7 @@ require_once 'config.php';
  */
 function editLevelContent($conn, $levelID, $levelName, $levelTime, $levelDescription)
 {
-    $stmt = $conn->prepare("UPDATE `tbllevel` SET `level_name` = ?, `time` = ?, `description` = ? WHERE `level_id` = ?");
+    $stmt = $conn->prepare("UPDATE `tbllevel` SET `level_name` = ?, `timetostudy` = ?, `description` = ? WHERE `level_id` = ?");
     if (!$stmt) {
         return false;
     }

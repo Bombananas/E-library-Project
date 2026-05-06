@@ -113,7 +113,7 @@ $currentTime =  $now->format('H:i');
                 <input type="text" id="levelName" name="levelName" placeholder="Level Name" value="<?php echo htmlspecialchars($levelName); ?>" required>
             </label>
             <label for="Time to Study">Time to Study
-                <input type="number" id="levelTime" name="levelTime" value="" placeholder="Level Time">
+                <input type="number" id="levelTime" name="levelTime" value="<?php echo htmlspecialchars($levelTime); ?>" placeholder="Level Time">
             </label>
             <label for="levelDescription">Level Description
                 <input type="text" id="levelDescription" name="levelDescription" placeholder="Level Description" value="<?php echo htmlspecialchars($levelDescription); ?>" required>

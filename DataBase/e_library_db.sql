@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tblbook` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `book_id` int(10) UNSIGNED NOT NULL,
   `book_name` varchar(255) NOT NULL,
   `book_author` varchar(255) NOT NULL,
   `description` text NOT NULL,
