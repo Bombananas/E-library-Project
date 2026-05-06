@@ -111,13 +111,13 @@ if ($editId > 0) {
                     <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($book['description'] ?? ''); ?></textarea>
                 </label>
                 <label for="uploadBookFile">Upload Book File
-                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?> value="<?php echo htmlspecialchars($book['book_source'] ?? ''); ?>">
                 </label>
                 <label for="uploadBookCover">Upload Book Cover
-                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?> value="<?php echo htmlspecialchars($book['book_cover'] ?? ''); ?>">
                 </label>
                 <label for="uploadVideoFile">Upload Video File
-                    <input type="file" id="uploadVideoFile" name="uploadVideoFile">
+                    <input type="file" id="uploadVideoFile" name="uploadVideoFile" value="<?php echo htmlspecialchars($book['book_video'] ?? ''); ?>">
                 </label>
                 <label for="majorId" style="display: none;">Major
                     <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? 0); ?>">
