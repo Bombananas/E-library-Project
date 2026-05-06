@@ -55,10 +55,8 @@ const App = {
 
     selectMajor(majorId) {
         window.selectedMajorId = majorId;
-        const addBookBtn = document.getElementById('addBookBtn');
         const fullListBtn = document.getElementById('fullListBtn');
-        if (window.userRole && addBookBtn) addBookBtn.style.display = 'block';
-        if (fullListBtn) fullListBtn.style.display = 'block';
+        if (window.userRole && fullListBtn) fullListBtn.style.display = 'block';
         App.openUrl('bookList.php?major_id=' + majorId, html => {
             const contentDisplay = document.querySelector('.contentDisplay');
             if (contentDisplay) {
@@ -104,6 +102,7 @@ addClass(className, element) {
     const elements = document.getElementById(element);
     if (elements) {
         elements.classList.add(className);
+        document.querySelector('.subjectSelect').classList.add('displayMajorList');
     }
 }
 };

@@ -37,15 +37,16 @@ $userRole = $_SESSION['user_role'] ?? null;
     <main class="mainBody">
         <div class="contentBody">
             <aside class="sideBar">
-                <?php if ($userRole == 'Admin'): ?>
-                <div class="seeLevelList">
-                    <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
+                <div class="levelHeader">
+                    <h1>កម្រិតសិក្សា</h1>
                 </div>
-                <?php endif; ?>
                 <?php
                 include("leveldata.php");
                 ?>
                 <?php if ($userRole == 'Admin'): ?>
+                <div class="seeLevelList">
+                    <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
+                </div>
                 <div class="seeLevelList">
                     <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
                 </div>
@@ -55,9 +56,8 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <div class="subjectSelect"></div>
                 <article class="contentDisplay">
                     <div class="button">
-                        <button type="button" id="fullListBtn" style="display: none;" onclick=" loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
-                        <button type="button" id="addBookBtn" class="addBookButton" style="display: none;" onclick="loadAddBookFormModal()">Add Book</button>
-                    </div>
+                        <button type="button" id="fullListBtn" style='display: none;' onclick=" loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
+                    </div>  
                     <?php
                     include("booklist.php");
                     ?>

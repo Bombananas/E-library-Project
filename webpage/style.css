@@ -69,8 +69,7 @@
 }
 
 .seeLevelList {
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: .5em;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -92,18 +91,35 @@
         border: none;
         cursor: pointer;
 }
-
+.levelHeader {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+.levelHeader h1 {
+    font-size: 1.7em;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #333;
+}
 .addBookButton:hover {
     background-color: #0056b3;
 }
 
-.seeLevelList .addBookButton button:hover {
+.seeLevelList button:hover {
     background-color: #0056b3;
 }
 
 .subjectSelect {
-    height: 25%;
-    width: 100%;;
+    min-height: 10%;
+    height: auto;
+    width: 100%;
+    display: none;
+}
+.displayMajorList {
+    display: block;
 }
 
 .contentDisplay {

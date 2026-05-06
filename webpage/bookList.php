@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-$majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : null;
+$majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : 18;
 $books = [];
 if ($majorId !== null) {
     $stmt = $conn->prepare("SELECT * FROM tblbook WHERE major_id = ?");
@@ -46,7 +46,7 @@ if ($majorId !== null) {
 
     .bookCover {
         width: 120px;
-        height: auto;
+        height: 141px;
         margin-right: 20px;
         border-radius: 4px;
     }

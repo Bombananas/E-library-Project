@@ -73,8 +73,11 @@ if ($majorId !== null) {
                     </div>
                 </li>
             <?php endforeach; ?>
-            <button type="button" onclick="closeForm()">Close</button>
+            <button type="button" id="addBookBtn" class="addBookButton"  onclick="loadAddBookFormModal()">Add Book</button>
+            <button type="button" class="addBookButton" onclick="closeForm()">Close</button>
         </ul>
     <?php else: ?>
         <p>No books found for this major.</p>
+        <button type="button" id="addBookBtn" class="addBookButton"  onclick="loadAddBookFormModal()">Add Book</button>
+        <button type="button" class="addBookButton" onclick="closeForm()">Close</button>
     <?php endif; ?>
