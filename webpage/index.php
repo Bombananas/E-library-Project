@@ -15,7 +15,7 @@ $userRole = $_SESSION['user_role'] ?? null;
 
 <body>
     <header class="banner">
-        <div class="navbar" >
+        <div class="navbar">
             <div class="logo" style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
                 <img src="image/schoollogo.png" alt="School Logo" style="width: 50px;">
                 <h1>NPIT E-Library</h1>
@@ -29,13 +29,14 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <?php endif; ?>
                 <?php if ($userRole == 'Admin'): ?>
                     <button type="button" onclick="closeForm(); loadData('registerForm.php')">Register</button>
-                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
         <div class="bannerContainer"></div>
     </header>
     <main class="mainBody">
         <div class="contentBody">
+
             <aside class="sideBar">
                 <div class="levelHeader">
                     <h1>កម្រិតសិក្សា</h1>
@@ -44,12 +45,12 @@ $userRole = $_SESSION['user_role'] ?? null;
                 include("leveldata.php");
                 ?>
                 <?php if ($userRole == 'Admin'): ?>
-                <div class="seeLevelList">
-                    <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
-                </div>
-                <div class="seeLevelList">
-                    <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
-                </div>
+                    <div class="seeLevelList">
+                        <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
+                    </div>
+                    <div class="seeLevelList">
+                        <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
+                    </div>
                 <?php endif; ?>
             </aside>
             <section class="mainContent">
@@ -57,7 +58,7 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <article class="contentDisplay">
                     <div class="button">
                         <button type="button" id="fullListBtn" style='display: none;' onclick=" loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
-                    </div>  
+                    </div>
                     <?php
                     include("booklist.php");
                     ?>
