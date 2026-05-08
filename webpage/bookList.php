@@ -33,7 +33,7 @@ if ($majorId !== null) {
         padding: 20px;
         background-color: #f5f5f5;
         max-width: 100%;
-        max-height: 100%;
+        max-height: 75dvh;
         margin: 0 auto;
         overflow-y: scroll;
         scrollbar-width: thin;

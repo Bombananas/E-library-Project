@@ -21,7 +21,7 @@ if ($bookId) {
 
 ?>
 <style>
-    .container {
+    .containerBook {
         width: 80%;
         padding: 20px;
         background-color: #333;
@@ -52,8 +52,22 @@ if ($bookId) {
         font-size: 16px;
         cursor: pointer;
     }
+    .bookSrouce {
+        margin-top: 20px;
+    }
+    .bookResource a {
+        display: inline-block;
+        margin-right: 10px;
+        margin-top: 20px;
+    }
+    .bookResource button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
 </style>
-<div class="container" style="width: 100%;
+<div class="containerBook" style="width: 100%;
         margin: 0 auto;
         padding: 20px;
         background-color: #333;">
@@ -64,14 +78,18 @@ if ($bookId) {
             </div>
             <div class="bookDetails" style="color: white;">
                 <h2><?php echo htmlspecialchars($book['book_name']); ?></h2>
-                <p><strong>Author:</strong> <?php echo htmlspecialchars($book['book_author']); ?></p>
-                <p><strong>Description:</strong></p>
-                <p><?php echo nl2br(htmlspecialchars($book['description'])); ?></p>
+                <p><strong>Author: </strong> <?php echo htmlspecialchars($book['book_author']); ?></p>
+                <p><strong>Description: </strong></p>
+                <p><?php echo htmlspecialchars($book['description']); ?></p>
             </div>
             <div class="bookResource" style="color: white;">
-                <iframe src="uploads/books/<?php echo htmlspecialchars($book['book_source']); ?>" frameborder="0"></iframe>
+                <a href="uploads/books/<?php echo htmlspecialchars($book['book_source']); ?>" target="_blank">
+                    <button>Read Book Online</button>
+                </a>
                 <?php if ($book['book_video']): ?>
-                    <video src="uploads/videos/<?php echo htmlspecialchars($book['book_video']); ?>" controls></video>
+                    <a href="uploads/videos/<?php echo htmlspecialchars($book['book_video']); ?>" target="_blank">
+                        <button>Watch Video</button>
+                    </a>
                 <?php endif; ?>
             </div>
         </div>

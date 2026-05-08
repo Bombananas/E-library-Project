@@ -149,6 +149,7 @@
     align-items: center;
     z-index: 1000;
     width: 720px;
+    max-height: 95dvh;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);

@@ -28,21 +28,22 @@ if ($majorId !== null) {
 }
 ?>
 <style>
-    .bookListContainer {
+    .bookListContainerFullList {
         padding: 20px;
         background-color: #f5f5f5;
         border-radius: 8px;
         max-width: 100%;
+        max-height: 90dvh;
         margin: 0 auto;
         cursor: pointer;
     }
 
-    .bookList {
+    .bookListFullList {
         list-style-type: none;
         padding: 0;
     }
 
-    .bookItem {
+    .bookItemFullList {
         display: flex;
         align-items: flex-start;
         margin-bottom: 20px;
@@ -52,24 +53,24 @@ if ($majorId !== null) {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .bookCover {
+    .bookCoverFullList {
         width: 120px;
         height: auto;
         margin-right: 20px;
         border-radius: 4px;
     }
 
-    .bookItem h3 {
+    .bookItemFullList h3 {
         margin-top: 0;
     }
 </style>
-<div class="bookListContainer">
+<div class="bookListContainerFullList">
     <?php if (count($books) > 0): ?>
         <h2><?php echo htmlspecialchars($levelName . '  :  ' . $majorNameRow['major_name_kh'] . ' / ' . $majorNameRow['major_name_en']); ?></h2>
-        <ul class="bookList">
+        <ul class="bookListFullList">
             <?php foreach ($books as $book): ?>
-                <li class="bookItem">
-                    <img src="uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCover">
+                <li class="bookItemFullList">
+                    <img src="uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCoverFullList">
                     <div class="bookInfomation">
                         <h3><?php echo htmlspecialchars($book['book_name']); ?></h3>
                         <p>Author: <?php echo htmlspecialchars($book['book_author']); ?></p>
