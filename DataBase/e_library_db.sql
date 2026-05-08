@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2026 at 09:43 AM
+-- Generation Time: May 02, 2026 at 04:59 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,18 +24,26 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tblcontent`
+-- Table structure for table `tblbook`
 --
 
-CREATE TABLE `tblcontent` (
-  `subject_id` int(10) UNSIGNED NOT NULL,
-  `subject_name` varchar(255) NOT NULL,
-  `teacher_name` varchar(255) NOT NULL,
+CREATE TABLE `tblbook` (
+  `book_id` int(10) UNSIGNED NOT NULL,
+  `book_name` varchar(255) NOT NULL,
+  `book_author` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `link_book` text NOT NULL,
-  `link_video` text NOT NULL,
-  `major_id` int(10) UNSIGNED NOT NULL
+  `book_source` varchar(255) NOT NULL,
+  `book_cover` varchar(255) NOT NULL,
+  `book_video` varchar(255) NOT NULL,
+  `major_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblbook`
+--
+
+INSERT INTO `tblbook` (`id`, `book_name`, `book_author`, `description`, `book_source`, `book_cover`, `book_video`, `major_id`) VALUES
+(38, 'BookName23', 'BookAuthor', 'dagyud', '595674424_1152675927068072_2433275573075965072_n.jpg', '', '', 19);
 
 -- --------------------------------------------------------
 
@@ -46,7 +54,7 @@ CREATE TABLE `tblcontent` (
 CREATE TABLE `tbllevel` (
   `level_id` int(10) UNSIGNED NOT NULL,
   `level_name` varchar(255) NOT NULL,
-  `time` time NOT NULL,
+  `timetostudy` int(11) NOT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -54,11 +62,12 @@ CREATE TABLE `tbllevel` (
 -- Dumping data for table `tbllevel`
 --
 
-INSERT INTO `tbllevel` (`level_id`, `level_name`, `time`, `description`) VALUES
-(14, 'C1', '07:30:00', 'Level 1 Training'),
-(15, 'C2', '07:30:00', 'Level 2 Training'),
-(16, 'C3', '07:30:00', 'Level 3 Training'),
-(17, 'បរិញ្ញាបត្រជាន់ខ្ពស់​', '07:30:00', 'បរិញ្ញាបត្រជាន់ខ្ពស់​');
+INSERT INTO `tbllevel` (`level_id`, `level_name`, `timetostudy`, `description`) VALUES
+(14, 'C1', 1, 'Level 1 Training'),
+(15, 'C2', 1, 'Level 2 Training'),
+(16, 'C3', 1, 'Level 3 Training'),
+(17, 'បរិញ្ញាបត្រជាន់ខ្ពស់​', 4, 'បរិញ្ញាបត្រជាន់ខ្ពស់​'),
+(19, 'Bachlar Decree', 4, 'IDK');
 
 -- --------------------------------------------------------
 
@@ -70,10 +79,18 @@ CREATE TABLE `tblmajor` (
   `major_id` int(10) UNSIGNED NOT NULL,
   `major_name_kh` varchar(255) NOT NULL,
   `major_name_en` varchar(255) NOT NULL,
-  `year_stardy` int(10) UNSIGNED NOT NULL,
   `description` text NOT NULL,
   `level_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblmajor`
+--
+
+INSERT INTO `tblmajor` (`major_id`, `major_name_kh`, `major_name_en`, `description`, `level_id`) VALUES
+(18, 'វិទ្យាសាស្ត្យកុំព្យូទ័', 'Computer Science', 'Class of 2026 second semester', 17),
+(19, 'អគ្គីសនី', 'Electrician', 'Class of 2026 second semester', 17),
+(20, 'អគ្គីសនី', 'Electrician', 'អគ្គីសនី', 19);
 
 -- --------------------------------------------------------
 
@@ -84,41 +101,27 @@ CREATE TABLE `tblmajor` (
 CREATE TABLE `tbluser` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `user_name` varchar(255) NOT NULL,
-  `position` varchar(255) NOT NULL,
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `userinfo`
---
-
-CREATE TABLE `userinfo` (
-  `ID` int(10) UNSIGNED NOT NULL,
-  `UserName` varchar(255) NOT NULL,
-  `Email` varchar(255) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `Role` set('User','Admin') NOT NULL DEFAULT 'User'
+  `user_password` varchar(255) NOT NULL,
+  `role` set('Admin','Teacher') NOT NULL DEFAULT 'Teacher'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `userinfo`
+-- Dumping data for table `tbluser`
 --
 
-INSERT INTO `userinfo` (`ID`, `UserName`, `Email`, `Password`, `Role`) VALUES
-(10, 'Admin', 'Admin@Test.com', '$2y$10$6IEnXqB2XWHrZbCCxVgBmOw/UZ9yFV3M7VtCCoIt0zIA8WS9F5ixS', 'Admin');
+INSERT INTO `tbluser` (`user_id`, `user_name`, `user_password`, `role`) VALUES
+(1, 'Admin', '$2y$10$lXXU2cAxOI1fSFNWL5AkIOKqiFXc.k2QBuNv4iTjwX7miUQ0rUCJC', 'Admin');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `tblcontent`
+-- Indexes for table `tblbook`
 --
-ALTER TABLE `tblcontent`
-  ADD PRIMARY KEY (`subject_id`),
-  ADD KEY `major_id` (`major_id`);
+ALTER TABLE `tblbook`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `majorID` (`major_id`);
 
 --
 -- Indexes for table `tbllevel`
@@ -140,54 +143,42 @@ ALTER TABLE `tbluser`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- Indexes for table `userinfo`
---
-ALTER TABLE `userinfo`
-  ADD PRIMARY KEY (`ID`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `tblcontent`
+-- AUTO_INCREMENT for table `tblbook`
 --
-ALTER TABLE `tblcontent`
-  MODIFY `subject_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `tblbook`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `tbllevel`
 --
 ALTER TABLE `tbllevel`
-  MODIFY `level_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `level_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `tblmajor`
 --
 ALTER TABLE `tblmajor`
-  MODIFY `major_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `major_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `userinfo`
---
-ALTER TABLE `userinfo`
-  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `tblcontent`
+-- Constraints for table `tblbook`
 --
-ALTER TABLE `tblcontent`
-  ADD CONSTRAINT `tblcontent_ibfk_1` FOREIGN KEY (`major_id`) REFERENCES `tblmajor` (`major_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `tblbook`
+  ADD CONSTRAINT `tblbook_ibfk_1` FOREIGN KEY (`major_id`) REFERENCES `tblmajor` (`major_id`);
 
 --
 -- Constraints for table `tblmajor`
