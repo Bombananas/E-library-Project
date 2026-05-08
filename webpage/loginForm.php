@@ -1,5 +1,8 @@
 <?php 
 require_once 'config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (isset($_POST['loginSubmit'])) {
     $userName = $_POST['userName'] ?? '';
@@ -23,7 +26,6 @@ if (isset($_POST['loginSubmit'])) {
 
         if (password_verify($password, $user['user_password'])) {
             $userRole = $user['role'];
-            session_start();
             $_SESSION['user_role'] = $userRole;
             header('Location: index.php');
             exit;
@@ -84,7 +86,7 @@ if (isset($_POST['loginSubmit'])) {
             <label for="password">Password
                 <input type="password" id="password" name="password" placeholder="Password" required>
             </label>
-            <button type="submit" name="loginSubmit<?php echo $userRole = $_SESSION['user_role'] ?? null; ?>">Login</button>
+            <button type="submit" name="loginSubmit">Login</button>
             <button type="button" onclick="closeForm()">Close</button>
         </form>
     </div>

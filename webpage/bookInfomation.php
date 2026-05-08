@@ -74,7 +74,7 @@ if ($bookId) {
     <section class="contentList">
         <div class="listContainer">
             <div class="bookCoverDetails">
-                <img src="uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" style="max-width: 100%; height: auto;">
+                <img src="/uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" style="max-width: 100%; height: auto;">
             </div>
             <div class="bookDetails" style="color: white;">
                 <h2><?php echo htmlspecialchars($book['book_name']); ?></h2>
@@ -83,11 +83,11 @@ if ($bookId) {
                 <p><?php echo htmlspecialchars($book['description']); ?></p>
             </div>
             <div class="bookResource" style="color: white;">
-                <a href="uploads/books/<?php echo htmlspecialchars($book['book_source']); ?>" target="_blank">
+                <a href="/uploads/books/<?php echo htmlspecialchars($book['book_source']); ?>" target="_blank">
                     <button>Read Book Online</button>
                 </a>
                 <?php if ($book['book_video']): ?>
-                    <a href="uploads/videos/<?php echo htmlspecialchars($book['book_video']); ?>" target="_blank">
+                    <a href="/uploads/videos/<?php echo htmlspecialchars($book['book_video']); ?>" target="_blank">
                         <button>Watch Video</button>
                     </a>
                 <?php endif; ?>

@@ -128,7 +128,6 @@ passwordComfire() {
     return true;
 }
 };
-const disableScroll = App.disableScroll;
 const loadData = App.loadData;
 const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;

@@ -1,5 +1,14 @@
 <?php
 require_once 'config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+ob_start();
+
+function sanitizeFileName($filename) {
+    return preg_replace('/[^A-Za-z0-9._-]/', '_', basename($filename));
+}
+
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
 $deleteId = isset($_GET['delete_id']) ? (int)$_GET['delete_id'] : 0;
 $major = null;
@@ -106,13 +115,13 @@ if ($editId > 0) {
                     <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($book['description'] ?? ''); ?></textarea>
                 </label>
                 <label for="uploadBookFile">Upload Book File
-                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?> value="<?php echo htmlspecialchars($book['book_source'] ?? ''); ?>">
+                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?>>
                 </label>
                 <label for="uploadBookCover">Upload Book Cover
-                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?> value="<?php echo htmlspecialchars($book['book_cover'] ?? ''); ?>">
+                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?>>
                 </label>
                 <label for="uploadVideoFile">Upload Video File
-                    <input type="file" id="uploadVideoFile" name="uploadVideoFile" value="<?php echo htmlspecialchars($book['book_video'] ?? ''); ?>">
+                    <input type="file" id="uploadVideoFile" name="uploadVideoFile">
                 </label>
                 <label for="majorId" style="display: none;">Major
                     <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? 0); ?>">
@@ -131,16 +140,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     $description = trim($_POST['description'] ?? '');
     $majorId = trim($_POST['majorId'] ?? '');
 
-    $bookFile = basename($_FILES['uploadBookFile']['name'] ?? '');
+    $bookFile = sanitizeFileName($_FILES['uploadBookFile']['name'] ?? '');
     $bookFileTmp = $_FILES['uploadBookFile']['tmp_name'] ?? '';
-    $bookCover = basename($_FILES['uploadBookCover']['name'] ?? '');
+    $bookCover = sanitizeFileName($_FILES['uploadBookCover']['name'] ?? '');
     $bookCoverTmp = $_FILES['uploadBookCover']['tmp_name'] ?? '';
-    $videoFile = basename($_FILES['uploadVideoFile']['name'] ?? '');
+    $videoFile = sanitizeFileName($_FILES['uploadVideoFile']['name'] ?? '');
     $videoFileTmp = $_FILES['uploadVideoFile']['tmp_name'] ?? '';
 
-    $booksFolder = __DIR__ . '/uploads/books/' . $bookFile;
-    $coverFolder = __DIR__ . '/uploads/covers/' . $bookCover;
-    $videoFolder = __DIR__ . '/uploads/videos/' . $videoFile;
+    $baseUploadDir = __DIR__ . '/uploads';
+    $booksFolder = $baseUploadDir . '/books/' . $bookFile;
+    $coverFolder = $baseUploadDir . '/covers/' . $bookCover;
+    $videoFolder = $baseUploadDir . '/videos/' . $videoFile;
+
+    if (!is_dir($baseUploadDir . '/books')) {
+        mkdir($baseUploadDir . '/books', 0755, true);
+    }
+    if (!is_dir($baseUploadDir . '/covers')) {
+        mkdir($baseUploadDir . '/covers', 0755, true);
+    }
+    if (!is_dir($baseUploadDir . '/videos')) {
+        mkdir($baseUploadDir . '/videos', 0755, true);
+    }
 
     if (!empty($bookFileTmp) && move_uploaded_file($bookFileTmp, $booksFolder)) {
         echo "Book file uploaded successfully.";

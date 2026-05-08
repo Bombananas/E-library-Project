@@ -1,43 +1,24 @@
 <?php
 require_once 'config.php';
-$goBackToLevel = isset($_GET['level_id_pre']) ? (int)$_GET['level_id_pre'] : 0;
-$getLevelIdResult = null;
-$backLevelId = $goBackToLevel > 0 
-    ? $goBackToLevel 
-    : ($getLevelIdResult ? $getLevelIdResult->fetch_assoc()['level_id'] : 0);
-function getMajorsByLevelId(int $levelId) {
-    global $conn;
-    $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE level_id = ?");
-    if ($stmt) {
-        $stmt->bind_param('i', $levelId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
-        return $result;
-    }
-    return false;
-}
-
-$editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
-$major = null;
-if ($editId > 0) {
-
-    $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE major_id = ?");
-    $stmt->bind_param('i', $editId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $major = $result->fetch_assoc();
-    $stmt->close();   
-    $getLevelId = $conn->prepare("SELECT level_id FROM tblmajor WHERE major_id = ?");
-    $getLevelId->bind_param('i', $editId);
-    $getLevelId->execute();
-    $getLevelIdResult = $getLevelId->get_result();  
-}
 $levelIdPre = 0;
 if (isset($_GET['level_id_pre'])) {
     $levelIdPre = (int)$_GET['level_id_pre'];
 } elseif (isset($_GET['level_idpre'])) {
     $levelIdPre = (int)$_GET['level_idpre'];
+}
+
+$editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
+$major = null;
+if ($editId > 0) {
+    $stmt = $conn->prepare("SELECT * FROM tblmajor WHERE major_id = ?");
+    $stmt->bind_param('i', $editId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $major = $result->fetch_assoc();
+    $stmt->close();
+    if ($major) {
+        $levelIdPre = $major['level_id'];
+    }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     $majorNameKh = trim($_POST['majorNameKh'] ?? '');
@@ -146,7 +127,7 @@ $levels = $conn->query("SELECT level_id, level_name FROM tbllevel");
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
             <button type="button" onclick="closeForm();">Close</button>
-            <button type="button" onclick="closeForm(); loadData('majorFullList.php?level_id=<?php echo $goBackToLevel > 0 ? $goBackToLevel : $getLevelIdResult->fetch_assoc()['level_id'] ?>')">Go Back</button>
+            <button type="button" onclick="closeForm(); loadData('majorFullList.php?level_id=<?php echo $levelIdPre > 0 ? $levelIdPre : 0 ?>')">Go Back</button>
         </form>
     </div>
 </body>

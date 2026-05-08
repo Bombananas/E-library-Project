@@ -71,7 +71,7 @@ if ($majorId !== null) {
         <ul class="bookList">
             <?php foreach ($books as $book): ?>
                 <li class="bookItem" onclick="loadData('bookInfomation.php?book_id=<?php echo $book['book_id']; ?>')">
-                    <img src="uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCover">
+                    <img src="/uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCover">
                     <div class="bookInfomation">
                         <h3><?php echo htmlspecialchars($book['book_name']); ?></h3>
                         <p>Author: <?php echo htmlspecialchars($book['book_author']); ?></p>

@@ -33,9 +33,11 @@ if ($majorId !== null) {
         background-color: #f5f5f5;
         border-radius: 8px;
         max-width: 100%;
-        max-height: 90dvh;
+        max-height: 70dvh;
         margin: 0 auto;
         cursor: pointer;
+        overflow-y: scroll;
+        scrollbar-width: thick;
     }
 
     .bookListFullList {
@@ -70,7 +72,7 @@ if ($majorId !== null) {
         <ul class="bookListFullList">
             <?php foreach ($books as $book): ?>
                 <li class="bookItemFullList">
-                    <img src="uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCoverFullList">
+                    <img src="/uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCoverFullList">
                     <div class="bookInfomation">
                         <h3><?php echo htmlspecialchars($book['book_name']); ?></h3>
                         <p>Author: <?php echo htmlspecialchars($book['book_author']); ?></p>
@@ -82,9 +84,9 @@ if ($majorId !== null) {
                     </div>
                 </li>
             <?php endforeach; ?>
-            <button type="button" id="addBookBtn" class="addBookButton" onclick="loadAddBookFormModal()">Add Book</button>
-            <button type="button" class="addBookButton" onclick="closeForm()">Close</button>
         </ul>
+        <button type="button" id="addBookBtn" class="addBookButton" onclick="loadAddBookFormModal()">Add Book</button>
+        <button type="button" class="addBookButton" onclick="closeForm()">Close</button>
     <?php else: ?>
         <p>No books found for this major.</p>
         <button type="button" id="addBookBtn" class="addBookButton" onclick="loadAddBookFormModal()">Add Book</button>
