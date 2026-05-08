@@ -126,8 +126,15 @@ passwordComfire() {
         return false;
     }
     return true;
-}
+},
 };
+const imagesArray = ['image/595674424_1152675927068072_2433275573075965072_n.jpg', 'image/595070714_1152675970401401_3052436451514776772_n.jpg', 'image/595070714_1152675970401401_3052436451514776772_n.jpg'];
+let   currentImageIndex = 1;
+function changeBackgroundImage() {
+    document.querySelector('.bannerContainer').style.background = `url(${imagesArray[currentImageIndex]})no-repeat center /cover`;
+    document.querySelector('.bannerContainer').style.transition = 'background 1s ease-in-out';
+    currentImageIndex = (currentImageIndex + 1) % imagesArray.length;
+}
 const loadData = App.loadData;
 const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;
@@ -138,3 +145,5 @@ const loadAddBookFormModal = App.loadAddBookFormModal;
 const editBook = App.editBook;
 const goBack = App.goBack;
 const addClass = App.addClass;
+setInterval(changeBackgroundImage, 3500);
+
