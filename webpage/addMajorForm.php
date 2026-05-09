@@ -1,5 +1,10 @@
 <?php
 require_once 'config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    $_SESSION['error'] = '';
+    $_SESSION['success'] = '';
+}
 $levelIdPre = 0;
 if (isset($_GET['level_id_pre'])) {
     $levelIdPre = (int)$_GET['level_id_pre'];
@@ -36,14 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         }
         if ($stmt) {
             if ($stmt->execute()) {
-                echo 'Success';
+                $_SESSION['success'] = "Major updated successfully.";
                 header('Location: index.php');
             } else {
-                echo 'Failed: ' . htmlspecialchars($stmt->error);
+                $_SESSION['error'] = 'Failed: ' . htmlspecialchars($stmt->error);
+                header('Location: index.php');
             }
             $stmt->close();
         } else {
-            echo 'Prepare failed: ' . htmlspecialchars($conn->error);
+            $_SESSION['error'] = 'Prepare failed: ' . htmlspecialchars($conn->error);
+            header('Location: index.php');
         }
 
 }

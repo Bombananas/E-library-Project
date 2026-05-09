@@ -148,6 +148,13 @@ function changeBackgroundImage() {
     document.querySelector('.bannerContainer').style.transition = 'background 1s ease-in-out';
     currentImageIndex = (currentImageIndex + 1) % imagesArray.length;
 }
+const statusMessageElement = document.getElementById('statusMessage');
+
+if (statusMessageElement && !statusMessageElement.hidden) {
+  setTimeout(() => {
+    statusMessageElement.hidden = true;
+  }, 3000);
+}
 const loadData = App.loadData;
 const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;
@@ -161,5 +168,6 @@ const addClass = App.addClass;
 const disableInteraction = App.disableInteraction;
 const reenableInteraction = App.reenableInteraction;
 const passwordComfire = App.passwordComfire;
+const statusMessage = App.statusMessage;
 setInterval(changeBackgroundImage, 3500);
 

@@ -52,6 +52,7 @@
     flex-direction: row;
     position: relative;
 }
+
 .contentBody::before {
     content: "";
     position: absolute;
@@ -63,6 +64,7 @@
     z-index: -1;
     filter: blur(10px);
 }
+
 .mainContent {
     width: 75%;
     height: 100dvh;
@@ -154,6 +156,25 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.statusMessage {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.statusMessage.hide {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
 .disableInteraction {
     pointer-events: none;
     opacity: 0.5;

@@ -2,6 +2,11 @@
 require_once 'config.php';
 session_start();
 $userRole = $_SESSION['user_role'] ?? null;
+$successMessage = $_SESSION['success'] ?? '';
+$errorMessage = $_SESSION['error'] ?? '';
+// Clear messages after displaying
+unset($_SESSION['success'], $_SESSION['error']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,10 +51,10 @@ $userRole = $_SESSION['user_role'] ?? null;
                 ?>
                 <?php if ($userRole == 'Admin'): ?>
                     <div class="seeLevelList">
-                        <button type="button"  onclick=" disableInteraction(); loadData('levelList.php')">See The Full List Of Level</button>
+                        <button type="button" onclick=" disableInteraction(); loadData('levelList.php')">See The Full List Of Level</button>
                     </div>
                     <div class="seeLevelList">
-                        <button type="button"  onclick="closeForm(); disableInteraction(); loadData('addLevelForm.php')">Add More Level</button>
+                        <button type="button" onclick="closeForm(); disableInteraction(); loadData('addLevelForm.php')">Add More Level</button>
                     </div>
                 <?php endif; ?>
             </aside>
@@ -67,6 +72,7 @@ $userRole = $_SESSION['user_role'] ?? null;
         </div>
     </main>
     <div id="showResult" class="showResult"></div>
+    <div id="statusMessage"class="statusMessage" <?php if ($successMessage === '' && $errorMessage === ''): ?>hidden <?php endif; ?>><h1><?php echo htmlspecialchars($successMessage ?: $errorMessage); ?></h1></div>
     <footer class="footer">
         <p>&copy; វិទ្យាស្ថានជាតិពហុបច្ចេកទេសកម្ពុជា NPIT. All rights reserved.</p>
     </footer>

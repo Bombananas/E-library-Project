@@ -2,6 +2,8 @@
 require_once 'config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+    $_SESSION['error'] = '';
+    $_SESSION['success'] = '';
 }
 ob_start();
 
@@ -115,13 +117,13 @@ if ($editId > 0) {
                     <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($book['description'] ?? ''); ?></textarea>
                 </label>
                 <label for="uploadBookFile">Upload Book File
-                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?> accept="application/pdf, .pdf">
                 </label>
                 <label for="uploadBookCover">Upload Book Cover
-                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?>>
+                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?> accept="image/jpeg, image/png, image/webp, .jpg, .jpeg, .png, .webp">
                 </label>
                 <label for="uploadVideoFile">Upload Video File
-                    <input type="file" id="uploadVideoFile" name="uploadVideoFile">
+                    <input type="file" id="uploadVideoFile" name="uploadVideoFile" accept="video/mp4, video/webm, .mp4, .webm">
                 </label>
                 <label for="majorId" style="display: none;">Major
                     <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? 0); ?>">
@@ -143,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     $result = $stmt->get_result();
     $existingBook = $result->fetch_assoc();
     if ($existingBook && $existingBook['book_name'] === $bookName) {
-        echo "A book with this name already exists. Please choose a different name.";
+        $_SESSION['error'] = "A book with this name already exists. Please choose a different name.";
         header('Location: index.php');
         exit;
     }
@@ -174,21 +176,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     }
 
     if (!empty($bookFileTmp) && move_uploaded_file($bookFileTmp, $booksFolder)) {
-        echo "Book file uploaded successfully.";
+        $_SESSION['success'] = "Book file uploaded successfully.";
     } else if (!empty($bookFileTmp)) {
-        echo "Failed to upload book file.";
+        $_SESSION['error'] = "Failed to upload book file.";
     }
 
     if (!empty($bookCoverTmp) && move_uploaded_file($bookCoverTmp, $coverFolder)) {
-        echo "Book cover uploaded successfully.";
+        $_SESSION['success'] = "Book cover uploaded successfully.";
     } else if (!empty($bookCoverTmp)) {
-        echo "Failed to upload book cover.";
+        $_SESSION['error'] = "Failed to upload book cover.";
     }
 
     if (!empty($videoFileTmp) && move_uploaded_file($videoFileTmp, $videoFolder)) {
-        echo "Video file uploaded successfully.";
+        $_SESSION['success'] = "Video file uploaded successfully.";
     } else if (!empty($videoFileTmp)) {
-        echo "Failed to upload video file.";
+        $_SESSION['error'] = "Failed to upload video file.";
     }
 
     if ($editId > 0) {
@@ -200,11 +202,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFileParam, $bookCoverParam, $videoFileParam, $editId);
 
         if ($stmt->execute()) {
-            echo "Book updated successfully.";
+            $_SESSION['success'] = "Book updated successfully.";
             header('Location: index.php');
             exit;
         } else {
-            echo "Failed to update book: " . $stmt->error;
+            $_SESSION['error'] = "Failed to update book: " . $stmt->error;
         }
         $stmt->close();
     } else {
@@ -212,11 +214,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
 
         if ($stmt->execute()) {
-            echo "Book added to database successfully.";
+            $_SESSION['success'] = "Book added to database successfully.";
             header('Location: index.php');
             exit;
         } else {
-            echo "Failed to add book to database: " . $stmt->error;
+            $_SESSION['error'] = "Failed to add book to database: " . $stmt->error;
         }
         $stmt->close();
     }
@@ -236,11 +238,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $stmt = $conn->prepare("DELETE FROM tblbook WHERE book_id = ?");
         $stmt->bind_param('i', $deleteId);
         if ($stmt->execute()) {
-            echo "Book deleted successfully.";
+            $_SESSION['success'] = "Book deleted successfully.";
             header('Location: index.php');
             exit;
         } else {
-            echo "Failed to delete book: " . $stmt->error;
+            $_SESSION['error'] = "Failed to delete book: " . $stmt->error;
         }
         $stmt->close();
     }
