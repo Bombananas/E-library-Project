@@ -154,6 +154,10 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+.disableInteraction {
+    pointer-events: none;
+    opacity: 0.5;
+}
 
 .button button {
     padding: 10px;

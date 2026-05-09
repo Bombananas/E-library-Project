@@ -22,13 +22,13 @@ $userRole = $_SESSION['user_role'] ?? null;
             </div>
             <div class="navLinks">
                 <?php if ($userRole == null): ?>
-                    <button type="button" onclick="closeForm(); loadData('loginForm.php')">Login</button>
+                    <button type="button" onclick="closeForm(); disableInteraction(); loadData('loginForm.php')">Login</button>
                 <?php endif; ?>
                 <?php if ($userRole != null): ?>
                     <button type="button" onclick="window.location.href='logout.php'">Logout</button>
                 <?php endif; ?>
                 <?php if ($userRole == 'Admin'): ?>
-                    <button type="button" onclick="closeForm(); loadData('registerForm.php')">Register</button>
+                    <button type="button" onclick="closeForm(); disableInteraction(); loadData('registerForm.php')">Register</button>
                 <?php endif; ?>
             </div>
         </div>
@@ -46,10 +46,10 @@ $userRole = $_SESSION['user_role'] ?? null;
                 ?>
                 <?php if ($userRole == 'Admin'): ?>
                     <div class="seeLevelList">
-                        <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
+                        <button type="button"  onclick=" disableInteraction(); loadData('levelList.php')">See The Full List Of Level</button>
                     </div>
                     <div class="seeLevelList">
-                        <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
+                        <button type="button"  onclick="closeForm(); disableInteraction(); loadData('addLevelForm.php')">Add More Level</button>
                     </div>
                 <?php endif; ?>
             </aside>
@@ -57,7 +57,7 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <div class="subjectSelect"></div>
                 <article class="contentDisplay">
                     <div class="button">
-                        <button type="button" id="fullListBtn" style='display: none;' onclick=" loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
+                        <button type="button" id="fullListBtn" style='display: none;' onclick=" disableInteraction(); loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
                     </div>
                     <?php
                     include("booklist.php");

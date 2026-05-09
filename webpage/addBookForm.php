@@ -136,9 +136,20 @@ if ($editId > 0) {
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     $bookName = trim($_POST['bookName'] ?? '');
+    $majorId = trim($_POST['majorId'] ?? '');
+    $stmt = $conn->prepare("SELECT * FROM tblbook WHERE book_name = ? AND major_id = ?");
+    $stmt->bind_param('si', $bookName,$majorId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $existingBook = $result->fetch_assoc();
+    if ($existingBook && $existingBook['book_name'] === $bookName) {
+        echo "A book with this name already exists. Please choose a different name.";
+        header('Location: index.php');
+        exit;
+    }
+    $stmt->close();
     $bookAuthor = trim($_POST['bookAuthor'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $majorId = trim($_POST['majorId'] ?? '');
 
     $bookFile = sanitizeFileName($_FILES['uploadBookFile']['name'] ?? '');
     $bookFileTmp = $_FILES['uploadBookFile']['tmp_name'] ?? '';

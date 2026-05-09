@@ -70,7 +70,7 @@ if ($majorId !== null) {
         <h2><?php echo htmlspecialchars($levelName . '  :  ' . $majorNameRow['major_name_kh'] . ' / ' . $majorNameRow['major_name_en']); ?></h2>
         <ul class="bookList">
             <?php foreach ($books as $book): ?>
-                <li class="bookItem" onclick="loadData('bookInfomation.php?book_id=<?php echo $book['book_id']; ?>')">
+                <li class="bookItem" onclick="disableInteraction(); loadData('bookInfomation.php?book_id=<?php echo $book['book_id']; ?>')">
                     <img src="/uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCover">
                     <div class="bookInfomation">
                         <h3><?php echo htmlspecialchars($book['book_name']); ?></h3>

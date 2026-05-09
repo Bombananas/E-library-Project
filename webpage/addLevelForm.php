@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
             <button type="button" onclick="closeForm()">Close</button>
-            <button type="button" onclick="closeForm(); loadData('levelList.php')">Go Back</button>
+            <button type="button" onclick="closeForm(); disableInteraction(); loadData('levelList.php')">Go Back</button>
         </form>
     </div>
 </body>

@@ -127,7 +127,7 @@ $levels = $conn->query("SELECT level_id, level_name FROM tbllevel");
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
             <button type="button" onclick="closeForm();">Close</button>
-            <button type="button" onclick="closeForm(); loadData('majorFullList.php?level_id=<?php echo $levelIdPre > 0 ? $levelIdPre : 0 ?>')">Go Back</button>
+            <button type="button" onclick="closeForm(); disableInteraction(); loadData('majorFullList.php?level_id=<?php echo $levelIdPre > 0 ? $levelIdPre : 0 ?>')">Go Back</button>
         </form>
     </div>
 </body>

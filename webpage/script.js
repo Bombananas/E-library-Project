@@ -6,6 +6,17 @@ const App = {
         e.preventDefault();
     }
 },
+    disableInteraction() {
+        const el = document.querySelector('.mainBody');
+        if (el) el.classList.add('disableInteraction');
+    }
+    
+,
+    reenableInteraction() {
+        const el = document.querySelector('.mainBody');
+        if (el) el.classList.remove('disableInteraction');
+    },
+
     showResult(selector, html) {
         const el = document.querySelector(selector);
         if (el) el.innerHTML = html;
@@ -61,6 +72,7 @@ const App = {
 
     closeForm() {
         App.showResult('#showResult', '');
+        App.reenableInteraction();
         window.removeEventListener('wheel', App.preventDefault);
         window.removeEventListener('touchmove', App.preventDefault);
         window.removeEventListener('keydown', App.preventKeys);
@@ -103,6 +115,7 @@ const App = {
     },
 
     goBack() {
+        disableInteraction();
         window.history.back();
     }, 
     editMajor(id) {
@@ -145,5 +158,8 @@ const loadAddBookFormModal = App.loadAddBookFormModal;
 const editBook = App.editBook;
 const goBack = App.goBack;
 const addClass = App.addClass;
+const disableInteraction = App.disableInteraction;
+const reenableInteraction = App.reenableInteraction;
+const passwordComfire = App.passwordComfire;
 setInterval(changeBackgroundImage, 3500);
 
