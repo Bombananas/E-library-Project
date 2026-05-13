@@ -1,6 +1,16 @@
 <?php
 require_once 'config.php';
-$majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : 18;
+$stmt = $conn->prepare("SELECT major_id FROM tblmajor ");
+$stmt->execute();
+$result = $stmt->get_result();
+$results = [];
+while ($row = $result->fetch_assoc()) {
+    $results[] = $row;
+}
+$randomKey = array_rand($results);
+$randomResult = $results[$randomKey];
+$majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : $randomResult['major_id'];
+$stmt->close();
 $levelName = '';
 $stmt = $conn->prepare("SELECT level_name FROM tbllevel WHERE level_id = (SELECT level_id FROM tblmajor WHERE major_id = ?)");
 $stmt->bind_param('i', $majorId);

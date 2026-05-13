@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 ob_start();
 
-function sanitizeFileName($filename) {
+function sanitizeFileName(string $filename): string {
     return preg_replace('/[^A-Za-z0-9._-]/', '_', basename($filename));
 }
 
