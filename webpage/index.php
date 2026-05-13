@@ -4,7 +4,6 @@ session_start();
 $userRole = $_SESSION['user_role'] ?? null;
 $successMessage = $_SESSION['success'] ?? '';
 $errorMessage = $_SESSION['error'] ?? '';
-// Clear messages after displaying
 unset($_SESSION['success'], $_SESSION['error']);
 
 ?>
