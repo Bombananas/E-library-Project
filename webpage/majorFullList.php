@@ -69,7 +69,7 @@ if ($levelId > 0) {
         </div>
     </section>
     <div class="button">
-        <button type="button" onclick="closeForm(); loadData('addMajorForm.php<?php echo $levelId > 0 ? '?level_id_pre=' . $levelId : '' ?>')">Add More Major</button>
+        <button type="button" onclick="closeForm(); disableInteraction(); loadData('addMajorForm.php<?php echo $levelId > 0 ? '?level_id_pre=' . $levelId : '' ?>')">Add More Major</button>
         <button type="button" onclick="closeForm();">Close</button>
     </div>
 </div>

@@ -6,6 +6,17 @@ const App = {
         e.preventDefault();
     }
 },
+    disableInteraction() {
+        const el = document.querySelector('.mainBody');
+        if (el) el.classList.add('disableInteraction');
+    }
+    
+,
+    reenableInteraction() {
+        const el = document.querySelector('.mainBody');
+        if (el) el.classList.remove('disableInteraction');
+    },
+
     showResult(selector, html) {
         const el = document.querySelector(selector);
         if (el) el.innerHTML = html;
@@ -61,6 +72,7 @@ const App = {
 
     closeForm() {
         App.showResult('#showResult', '');
+        App.reenableInteraction();
         window.removeEventListener('wheel', App.preventDefault);
         window.removeEventListener('touchmove', App.preventDefault);
         window.removeEventListener('keydown', App.preventKeys);
@@ -103,6 +115,7 @@ const App = {
     },
 
     goBack() {
+        disableInteraction();
         window.history.back();
     }, 
     editMajor(id) {
@@ -126,9 +139,22 @@ passwordComfire() {
         return false;
     }
     return true;
-}
+},
 };
-const disableScroll = App.disableScroll;
+const imagesArray = ['image/595674424_1152675927068072_2433275573075965072_n.jpg', 'image/595070714_1152675970401401_3052436451514776772_n.jpg', 'image/595070714_1152675970401401_3052436451514776772_n.jpg'];
+let   currentImageIndex = 1;
+function changeBackgroundImage() {
+    document.querySelector('.bannerContainer').style.background = `url(${imagesArray[currentImageIndex]})no-repeat center /cover`;
+    document.querySelector('.bannerContainer').style.transition = 'background 1s ease-in-out';
+    currentImageIndex = (currentImageIndex + 1) % imagesArray.length;
+}
+const statusMessageElement = document.getElementById('statusMessage');
+
+if (statusMessageElement && !statusMessageElement.hidden) {
+  setTimeout(() => {
+    statusMessageElement.hidden = true;
+  }, 3000);
+}
 const loadData = App.loadData;
 const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;
@@ -139,3 +165,9 @@ const loadAddBookFormModal = App.loadAddBookFormModal;
 const editBook = App.editBook;
 const goBack = App.goBack;
 const addClass = App.addClass;
+const disableInteraction = App.disableInteraction;
+const reenableInteraction = App.reenableInteraction;
+const passwordComfire = App.passwordComfire;
+const statusMessage = App.statusMessage;
+setInterval(changeBackgroundImage, 3500);
+

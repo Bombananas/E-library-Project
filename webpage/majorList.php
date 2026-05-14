@@ -90,7 +90,7 @@ if ($levelId !== null) {
     </section>
         <?php if ($levelId !== null && $userRole == 'Admin'): ?>
             <div class="button">
-                <button type="button" onclick=" loadData('majorFullList.php?level_id=<?php echo $levelId ?>');">See The Full List Of Majors</button>
+                <button type="button" onclick=" disableInteraction(); loadData('majorFullList.php?level_id=<?php echo $levelId ?>');">See The Full List Of Majors</button>
             </div>
         <?php endif; ?>
 </div>

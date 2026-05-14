@@ -54,12 +54,12 @@ if (isset($_GET['delete'])) {
                         ?>
                                 <tr>
                                     <td><?php echo $ID ?></td>
-                                    <td><span onclick="loadIntoSubjectSelect('majorList.php?level_id=<?php echo $row['level_id'] ?>'); loadData('addMajorForm.php?level_id_pre=<?php echo $row['level_id'] ?>');" style="cursor:pointer; color:#007bff; text-decoration:underline;"><?php echo $levelName ?></span></td>
+                                    <td><span><?php echo $levelName ?></span></td>
                                     <td><?php echo $levelTime ?></td>
                                     <td><?php echo $levelDescription ?></td>
                                     <td>
                                         <a href="levelList.php?delete=<?php echo $row['level_id'] ?>" class="deletecontent"><i>Delete</i></a>
-                                        <a href="#" onclick="loadData('addLevelForm.php?edit_id=<?php echo $row['level_id'] ?>')" class="editcontent"><i>Edit</i></a>
+                                        <a href="javascript:void(0)" onclick=" disableInteraction(); loadData('addLevelForm.php?edit_id=<?php echo $row['level_id'] ?>')" class="editcontent"><i>Edit</i></a>
                                     </td>
                                 </tr>
                         <?php
@@ -71,7 +71,7 @@ if (isset($_GET['delete'])) {
             </div>
         </section>
         <div class="button">
-            <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
+            <button type="button" onclick="closeForm(); disableInteraction(); loadData('addLevelForm.php')">Add More Level</button>
             <button type="button" onclick="closeForm()">Close</button>
         </div>
 

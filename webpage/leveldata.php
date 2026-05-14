@@ -1,5 +1,8 @@
 <?php
 require_once 'config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $userRole = $_SESSION['user_role'] ?? null;
 $displayList = $conn->query("SELECT * FROM `tbllevel`");
 if (mysqli_num_rows($displayList) > 0) {

@@ -1,6 +1,10 @@
 <?php
 require_once 'config.php';
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    $_SESSION['error'] = '';
+    $_SESSION['success'] = '';
+}
 
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
 $levelIdPre = isset($_GET['level_idpre']) ? (int)$_GET['level_idpre'] : 0;
@@ -31,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     $levelDescription = trim($_POST['levelDescription'] ?? '');
 
     if ($levelName === '' || $levelTime === '' || $levelDescription === '') {
+        $_SESSION['error'] = "All fields are required.";
         header('location:index.php');
         exit;
     }
@@ -38,29 +43,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     if ($editId > 0) {
         $stmt = $conn->prepare("UPDATE `tbllevel` SET `level_name` = ?, `timetostudy` = ?, `description` = ? WHERE `level_id` = ?");
         if (!$stmt) {   
-            echo 'Prepare failed: ' . htmlspecialchars($conn->error);
+            $_SESSION['error'] = 'Prepare failed: ' . htmlspecialchars($conn->error);
+            header('location:index.php');
             exit;
         }
         $stmt->bind_param('sssi', $levelName, $levelTime, $levelDescription, $editId);
         $updated = $stmt->execute();    
         if ($updated) {
+            $_SESSION['success'] = "Level updated successfully.";
             header('location:index.php');
             exit;
         }
-        echo 'Update failed: ' . htmlspecialchars($conn->error);
+        $_SESSION['error'] = 'Update failed: ' . htmlspecialchars($conn->error);
     } else {
         $stmt = $conn->prepare("INSERT INTO `tbllevel` (`level_name`, `timetostudy`, `description`) VALUES (?, ?, ?)");
         if ($stmt) {
             $stmt->bind_param('sss', $levelName, $levelTime, $levelDescription);
             if ($stmt->execute()) {
+                $_SESSION['success'] = "Level added to database successfully.";
                 header('location:index.php');
                 exit;
             } else {
-                echo 'Insert failed: ' . htmlspecialchars($stmt->error);
+                $_SESSION['error'] = 'Insert failed: ' . htmlspecialchars($stmt->error);
             }
             $stmt->close();
         } else {
-            echo 'Prepare failed: ' . htmlspecialchars($conn->error);
+            $_SESSION['error'] = 'Prepare failed: ' . htmlspecialchars($conn->error);
+            header('location:index.php');
+            exit;
         }
     }
 }
@@ -125,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
             </label>
             <button type="submit" name="contentSubmit"><?php echo $editId > 0 ? 'Update' : 'Submit'; ?></button>
             <button type="button" onclick="closeForm()">Close</button>
-            <button type="button" onclick="closeForm(); loadData('levelList.php')">Go Back</button>
+            <button type="button" onclick="closeForm(); disableInteraction(); loadData('levelList.php')">Go Back</button>
         </form>
     </div>
 </body>

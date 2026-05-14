@@ -2,6 +2,10 @@
 require_once 'config.php';
 session_start();
 $userRole = $_SESSION['user_role'] ?? null;
+$successMessage = $_SESSION['success'] ?? '';
+$errorMessage = $_SESSION['error'] ?? '';
+unset($_SESSION['success'], $_SESSION['error']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +13,7 @@ $userRole = $_SESSION['user_role'] ?? null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>NPIT E-Library</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,13 +26,13 @@ $userRole = $_SESSION['user_role'] ?? null;
             </div>
             <div class="navLinks">
                 <?php if ($userRole == null): ?>
-                    <button type="button" onclick="closeForm(); loadData('loginForm.php')">Login</button>
+                    <button type="button" onclick="closeForm(); disableInteraction(); loadData('loginForm.php')">Login</button>
                 <?php endif; ?>
                 <?php if ($userRole != null): ?>
                     <button type="button" onclick="window.location.href='logout.php'">Logout</button>
                 <?php endif; ?>
                 <?php if ($userRole == 'Admin'): ?>
-                    <button type="button" onclick="closeForm(); loadData('registerForm.php')">Register</button>
+                    <button type="button" onclick="closeForm(); disableInteraction(); loadData('registerForm.php')">Register</button>
                 <?php endif; ?>
             </div>
         </div>
@@ -46,10 +50,10 @@ $userRole = $_SESSION['user_role'] ?? null;
                 ?>
                 <?php if ($userRole == 'Admin'): ?>
                     <div class="seeLevelList">
-                        <button type="button" onclick="loadData('levelList.php')">See The Full List Of Level</button>
+                        <button type="button" onclick=" disableInteraction(); loadData('levelList.php')">See The Full List Of Level</button>
                     </div>
                     <div class="seeLevelList">
-                        <button type="button" onclick="closeForm(); loadData('addLevelForm.php')">Add More Level</button>
+                        <button type="button" onclick="closeForm(); disableInteraction(); loadData('addLevelForm.php')">Add More Level</button>
                     </div>
                 <?php endif; ?>
             </aside>
@@ -57,7 +61,7 @@ $userRole = $_SESSION['user_role'] ?? null;
                 <div class="subjectSelect"></div>
                 <article class="contentDisplay">
                     <div class="button">
-                        <button type="button" id="fullListBtn" style='display: none;' onclick=" loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
+                        <button type="button" id="fullListBtn" style='display: none;' onclick=" disableInteraction(); loadData('bookFullList.php?major_id=' + window.selectedMajorId + '');">See The Full List Of Books</button>
                     </div>
                     <?php
                     include("booklist.php");
@@ -67,6 +71,7 @@ $userRole = $_SESSION['user_role'] ?? null;
         </div>
     </main>
     <div id="showResult" class="showResult"></div>
+    <div id="statusMessage"class="statusMessage" <?php if ($successMessage === '' && $errorMessage === ''): ?>hidden <?php endif; ?>><h1><?php echo htmlspecialchars($successMessage ?: $errorMessage); ?></h1></div>
     <footer class="footer">
         <p>&copy; វិទ្យាស្ថានជាតិពហុបច្ចេកទេសកម្ពុជា NPIT. All rights reserved.</p>
     </footer>

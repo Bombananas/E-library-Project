@@ -1,26 +1,34 @@
 <?php
 require_once 'config.php';
-$userName = $_POST['userName'] ?? '';
-$password = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
-$userNameQury = "SELECT * FROM tbluser WHERE user_name = ?";
-$stmt = $conn->prepare($userNameQury);
-$stmt->bind_param('s', $userName);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows > 0) {
-    echo 'Username already exists.';
-    exit;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
-$registerQuery = "INSERT INTO tbluser (user_name, user_password) VALUES (?, ?)";
+$userName = '';
+$passwordRaw = '';
 if (isset($_POST['registerSubmit'])) {
-    if (empty($userName) || empty($password)) {
+    $userName = trim($_POST['userName'] ?? '');
+    $passwordRaw = $_POST['password'] ?? '';
+
+    if ($userName === '' || $passwordRaw === '') {
         echo 'Username and password cannot be empty.';
         exit;
     }
+
+    $password = password_hash($passwordRaw, PASSWORD_DEFAULT);
+    $userNameQuery = "SELECT * FROM tbluser WHERE user_name = ?";
+    $stmt = $conn->prepare($userNameQuery);
+    $stmt->bind_param('s', $userName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        echo 'Username already exists.';
+        exit;
+    }
+
+    $registerQuery = "INSERT INTO tbluser (user_name, user_password) VALUES (?, ?)";
     $stmt = $conn->prepare($registerQuery);
     $stmt->bind_param('ss', $userName, $password);
     if ($stmt->execute()) {
-        echo 'Registration successful. You can now log in.';
         header('Location: index.php');
         exit;
     } else {

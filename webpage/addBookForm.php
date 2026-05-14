@@ -1,5 +1,16 @@
 <?php
 require_once 'config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    $_SESSION['error'] = '';
+    $_SESSION['success'] = '';
+}
+ob_start();
+
+function sanitizeFileName(string $filename): string {
+    return preg_replace('/[^A-Za-z0-9._-]/', '_', basename($filename));
+}
+
 $editId = isset($_GET['edit_id']) ? (int)$_GET['edit_id'] : 0;
 $deleteId = isset($_GET['delete_id']) ? (int)$_GET['delete_id'] : 0;
 $major = null;
@@ -106,13 +117,13 @@ if ($editId > 0) {
                     <textarea id="description" name="description" placeholder="Description" required><?php echo htmlspecialchars($book['description'] ?? ''); ?></textarea>
                 </label>
                 <label for="uploadBookFile">Upload Book File
-                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?> value="<?php echo htmlspecialchars($book['book_source'] ?? ''); ?>">
+                    <input type="file" id="uploadBookFile" name="uploadBookFile" <?php echo $editId > 0 ? '' : 'required'; ?> accept="application/pdf, .pdf">
                 </label>
                 <label for="uploadBookCover">Upload Book Cover
-                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?> value="<?php echo htmlspecialchars($book['book_cover'] ?? ''); ?>">
+                    <input type="file" id="uploadBookCover" name="uploadBookCover" <?php echo $editId > 0 ? '' : 'required'; ?> accept="image/jpeg, image/png, image/webp, .jpg, .jpeg, .png, .webp">
                 </label>
                 <label for="uploadVideoFile">Upload Video File
-                    <input type="file" id="uploadVideoFile" name="uploadVideoFile" value="<?php echo htmlspecialchars($book['book_video'] ?? ''); ?>">
+                    <input type="file" id="uploadVideoFile" name="uploadVideoFile" accept="video/mp4, video/webm, .mp4, .webm">
                 </label>
                 <label for="majorId" style="display: none;">Major
                     <input hidden type="text" id="majorId" name="majorId" placeholder="Major ID" value="<?php echo htmlspecialchars($book['major_id'] ?? 0); ?>">
@@ -127,37 +138,59 @@ if ($editId > 0) {
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
     $bookName = trim($_POST['bookName'] ?? '');
+    $majorId = trim($_POST['majorId'] ?? '');
+    $stmt = $conn->prepare("SELECT * FROM tblbook WHERE book_name = ? AND major_id = ?");
+    $stmt->bind_param('si', $bookName,$majorId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $existingBook = $result->fetch_assoc();
+    if ($existingBook && $existingBook['book_name'] === $bookName) {
+        $_SESSION['error'] = "A book with this name already exists. Please choose a different name.";
+        header('Location: index.php');
+        exit;
+    }
+    $stmt->close();
     $bookAuthor = trim($_POST['bookAuthor'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $majorId = trim($_POST['majorId'] ?? '');
 
-    $bookFile = basename($_FILES['uploadBookFile']['name'] ?? '');
+    $bookFile = sanitizeFileName($_FILES['uploadBookFile']['name'] ?? '');
     $bookFileTmp = $_FILES['uploadBookFile']['tmp_name'] ?? '';
-    $bookCover = basename($_FILES['uploadBookCover']['name'] ?? '');
+    $bookCover = sanitizeFileName($_FILES['uploadBookCover']['name'] ?? '');
     $bookCoverTmp = $_FILES['uploadBookCover']['tmp_name'] ?? '';
-    $videoFile = basename($_FILES['uploadVideoFile']['name'] ?? '');
+    $videoFile = sanitizeFileName($_FILES['uploadVideoFile']['name'] ?? '');
     $videoFileTmp = $_FILES['uploadVideoFile']['tmp_name'] ?? '';
 
-    $booksFolder = __DIR__ . '/uploads/books/' . $bookFile;
-    $coverFolder = __DIR__ . '/uploads/covers/' . $bookCover;
-    $videoFolder = __DIR__ . '/uploads/videos/' . $videoFile;
+    $baseUploadDir = __DIR__ . '/uploads';
+    $booksFolder = $baseUploadDir . '/books/' . $bookFile;
+    $coverFolder = $baseUploadDir . '/covers/' . $bookCover;
+    $videoFolder = $baseUploadDir . '/videos/' . $videoFile;
+
+    if (!is_dir($baseUploadDir . '/books')) {
+        mkdir($baseUploadDir . '/books', 0755, true);
+    }
+    if (!is_dir($baseUploadDir . '/covers')) {
+        mkdir($baseUploadDir . '/covers', 0755, true);
+    }
+    if (!is_dir($baseUploadDir . '/videos')) {
+        mkdir($baseUploadDir . '/videos', 0755, true);
+    }
 
     if (!empty($bookFileTmp) && move_uploaded_file($bookFileTmp, $booksFolder)) {
-        echo "Book file uploaded successfully.";
+        $_SESSION['success'] = "Book file uploaded successfully.";
     } else if (!empty($bookFileTmp)) {
-        echo "Failed to upload book file.";
+        $_SESSION['error'] = "Failed to upload book file.";
     }
 
     if (!empty($bookCoverTmp) && move_uploaded_file($bookCoverTmp, $coverFolder)) {
-        echo "Book cover uploaded successfully.";
+        $_SESSION['success'] = "Book cover uploaded successfully.";
     } else if (!empty($bookCoverTmp)) {
-        echo "Failed to upload book cover.";
+        $_SESSION['error'] = "Failed to upload book cover.";
     }
 
     if (!empty($videoFileTmp) && move_uploaded_file($videoFileTmp, $videoFolder)) {
-        echo "Video file uploaded successfully.";
+        $_SESSION['success'] = "Video file uploaded successfully.";
     } else if (!empty($videoFileTmp)) {
-        echo "Failed to upload video file.";
+        $_SESSION['error'] = "Failed to upload video file.";
     }
 
     if ($editId > 0) {
@@ -169,11 +202,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFileParam, $bookCoverParam, $videoFileParam, $editId);
 
         if ($stmt->execute()) {
-            echo "Book updated successfully.";
+            $_SESSION['success'] = "Book updated successfully.";
             header('Location: index.php');
             exit;
         } else {
-            echo "Failed to update book: " . $stmt->error;
+            $_SESSION['error'] = "Failed to update book: " . $stmt->error;
         }
         $stmt->close();
     } else {
@@ -181,11 +214,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $stmt->bind_param('ssssssi', $bookName, $bookAuthor, $description, $bookFile, $bookCover, $videoFile, $majorId);
 
         if ($stmt->execute()) {
-            echo "Book added to database successfully.";
+            $_SESSION['success'] = "Book added to database successfully.";
             header('Location: index.php');
             exit;
         } else {
-            echo "Failed to add book to database: " . $stmt->error;
+            $_SESSION['error'] = "Failed to add book to database: " . $stmt->error;
         }
         $stmt->close();
     }
@@ -205,11 +238,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contentSubmit'])) {
         $stmt = $conn->prepare("DELETE FROM tblbook WHERE book_id = ?");
         $stmt->bind_param('i', $deleteId);
         if ($stmt->execute()) {
-            echo "Book deleted successfully.";
+            $_SESSION['success'] = "Book deleted successfully.";
             header('Location: index.php');
             exit;
         } else {
-            echo "Failed to delete book: " . $stmt->error;
+            $_SESSION['error'] = "Failed to delete book: " . $stmt->error;
         }
         $stmt->close();
     }

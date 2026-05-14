@@ -1,6 +1,16 @@
 <?php
 require_once 'config.php';
-$majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : 18;
+$stmt = $conn->prepare("SELECT major_id FROM tblmajor ");
+$stmt->execute();
+$result = $stmt->get_result();
+$results = [];
+while ($row = $result->fetch_assoc()) {
+    $results[] = $row;
+}
+$randomKey = array_rand($results);
+$randomResult = $results[$randomKey];
+$majorId = isset($_GET['major_id']) ? (int)$_GET['major_id'] : $randomResult['major_id'];
+$stmt->close();
 $levelName = '';
 $stmt = $conn->prepare("SELECT level_name FROM tbllevel WHERE level_id = (SELECT level_id FROM tblmajor WHERE major_id = ?)");
 $stmt->bind_param('i', $majorId);
@@ -70,8 +80,8 @@ if ($majorId !== null) {
         <h2><?php echo htmlspecialchars($levelName . '  :  ' . $majorNameRow['major_name_kh'] . ' / ' . $majorNameRow['major_name_en']); ?></h2>
         <ul class="bookList">
             <?php foreach ($books as $book): ?>
-                <li class="bookItem" onclick="loadData('bookInfomation.php?book_id=<?php echo $book['book_id']; ?>')">
-                    <img src="uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCover">
+                <li class="bookItem" onclick="disableInteraction(); loadData('bookInfomation.php?book_id=<?php echo $book['book_id']; ?>')">
+                    <img src="/uploads/covers/<?php echo htmlspecialchars($book['book_cover']); ?>" alt="Book Cover" class="bookCover">
                     <div class="bookInfomation">
                         <h3><?php echo htmlspecialchars($book['book_name']); ?></h3>
                         <p>Author: <?php echo htmlspecialchars($book['book_author']); ?></p>
