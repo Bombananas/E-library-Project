@@ -53,7 +53,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <button type="button" onclick=" disableInteraction(); loadData('levelList.php')">See The Full List Of Level</button>
                     </div>
                     <div class="seeLevelList">
-                        <button type="button" onclick="closeForm(); disableInteraction(); loadData('addLevelForm.php')">Add More Level</button>
+                        <button type="button" onclick="closeForm(); disableInteraction(); loadData('addLevelForm.html')">Add More Level</button>
                     </div>
                 <?php endif; ?>
             </aside>
@@ -71,7 +71,9 @@ unset($_SESSION['success'], $_SESSION['error']);
         </div>
     </main>
     <div id="showResult" class="showResult"></div>
-    <div id="statusMessage"class="statusMessage" <?php if ($successMessage === '' && $errorMessage === ''): ?>hidden <?php endif; ?>><h1><?php echo htmlspecialchars($successMessage ?: $errorMessage); ?></h1></div>
+    <div id="statusMessageContainer" class="statusMessage" hidden>
+        <h1 id='statusMessage'></h1>
+    </div>
     <footer class="footer">
         <p>&copy; វិទ្យាស្ថានជាតិពហុបច្ចេកទេសកម្ពុជា NPIT. All rights reserved.</p>
     </footer>
@@ -79,6 +81,7 @@ unset($_SESSION['success'], $_SESSION['error']);
         window.userRole = '<?php echo addslashes($userRole ?? ''); ?>';
     </script>
     <script src="script.js"></script>
+    <script src="index.js"></script>
 </body>
 
 </html>

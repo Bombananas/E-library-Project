@@ -150,11 +150,11 @@ function changeBackgroundImage() {
 }
 const statusMessageElement = document.getElementById('statusMessage');
 
-if (statusMessageElement && !statusMessageElement.hidden) {
+/* if (statusMessageElement && !statusMessageElement.hidden) {
   setTimeout(() => {
     statusMessageElement.hidden = true;
   }, 3000);
-}
+} */
 const loadData = App.loadData;
 const loadIntoSubjectSelect = App.loadIntoSubjectSelect;
 const deleteMajor = App.deleteMajor;
