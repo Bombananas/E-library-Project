@@ -53,7 +53,8 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <button type="button" onclick=" disableInteraction(); loadData('levelList.php')">See The Full List Of Level</button>
                     </div>
                     <div class="seeLevelList">
-                        <button type="button" onclick="closeForm(); disableInteraction(); loadData('addLevelForm.html')">Add More Level</button>
+                        <button type="button" id="Add-levelForm" onclick="closeForm();
+                        disableInteraction(); loadData('addLevelForm.html')">Add More Level</button>
                     </div>
                 <?php endif; ?>
             </aside>
