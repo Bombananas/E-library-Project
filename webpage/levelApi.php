@@ -17,9 +17,25 @@ if (isset($_GET['action']) && $_GET['action'] === 'submit-levelContent') {
         if ($stmt->execute()) {
             messages('level add successfully');
         } else {
+            messages('An Error has occur Insertion');
         }
         $stmt->close();
     } else {
         messages('An Error has occur');
+    }
+}
+if (isset($_GET['action']) && $_GET['action'] === 'delete-levelContent') {
+    $levelId = $_GET['id'];
+    $stmt = $conn->prepare('DELETE FROM `tbllevel` WHERE level_id= ?');
+    if ($stmt) {
+        $stmt->bind_param('i', $levelId);
+        if ($stmt->execute()) {
+            messages('level deleted successfully');
+        } else {
+            messages('An Error has occur During Delete');
+        }
+        $stmt->close();
+    } else {
+        messages('An Error Has occur');
     }
 }

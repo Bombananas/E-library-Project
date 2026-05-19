@@ -33,11 +33,12 @@ async function insertLevel(action) {
 }
 async function deleteLevel(id){
     try{
-        const responese = await fetch(`levelApi.php?= delete-levelContent=${id}`,{
+        const responese = await fetch(`levelApi.php?action=delete-levelContent&id=${id}`,{
             method: 'POST',
             headers: {
                 'Content-Type':'application/json'
-            }
+            },
+            body: JSON.stringify({id: id})
         });
         if (!responese.ok){
             throw new Error('Network responese is broken ' + responese.statusText);
@@ -56,3 +57,4 @@ document.getElementById('Add-levelForm').addEventListener('click',()=>{
             await insertLevel('submit-levelContent');
     })
 })
+

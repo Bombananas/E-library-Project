@@ -27,6 +27,7 @@ if (isset($_GET['delete'])) {
 <style>
 
 </style>
+
 <body>
     <div class="container" style="width: 100%;
         margin: 0 auto;
@@ -58,7 +59,7 @@ if (isset($_GET['delete'])) {
                                     <td><?php echo $levelTime ?></td>
                                     <td><?php echo $levelDescription ?></td>
                                     <td>
-                                        <a href="levelList.php?delete=<?php echo $row['level_id'] ?>" class="deletecontent"><i>Delete</i></a>
+                                        <button onclick="deleteLevel(<?php echo $row['level_id'] ?>)">Delete</button>
                                         <a href="javascript:void(0)" onclick=" disableInteraction(); loadData('addLevelForm.php?edit_id=<?php echo $row['level_id'] ?>')" class="editcontent"><i>Edit</i></a>
                                     </td>
                                 </tr>
@@ -77,5 +78,6 @@ if (isset($_GET['delete'])) {
 
     </div>
 </body>
+<script src="index.js"></script>
 
 </html>
